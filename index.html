@@ -125,58 +125,43 @@ return d===5||d===6||d===0;
 }
 
 function render(i){
-let c=kids[i];
-let el=document.getElementById("child"+i);
-el.innerHTML = `
-  <div class="avatar">${c.avatar}</div>
-  <h2>${c.name}</h2>
-`;
+  let c = kids[i];
+  let el = document.getElementById("child"+i);
 
-<div class="avatar">${c.avatar}</div>
-<h2>${c.name}</h2>
-`;
+  el.innerHTML = `
+    <div class="avatar">${i === 0 ? '🦁' : '🐯'}</div>
+    <h2>${c.name}</h2>
+  `;
 
+  for(let t in chores){
+    el.innerHTML += `<div class="header ${t.toLowerCase()}">${t}</div>`;
+    chores[t].forEach(ch=>{
+      el.innerHTML += `
+        <div class="chore">
+          <span>${ch[0]} ${ch[1]} <span class="value">⭐${ch[2]}</span></span>
+          <button onclick="done(${i},${ch[2]})">✓</button>
+        </div>`;
+    });
+  }
 
-for(let t in chores){
-el.innerHTML+='<div class="header '+t.toLowerCase()+'">'+t+'</div>';
-chores[t].forEach(ch=>{
-el.innerHTML+=`
-<div class="chore">
-<span>${ch[0]} ${ch[1]} <span class="value">⭐${ch[2]}</span></span>
-<button onclick="done(${i},${ch[2]})">✓</button>
-</div>`;
-});
+  let ex = extras[i];
+  el.innerHTML += `
+    <div class="chore">
+      <span>${ex[0]} ${ex[1]} <span class="value">⭐${ex[2]}</span></span>
+      <button onclick="done(${i},${ex[2]})">✓</button>
+    </div>
+
+    <div class="summary">
+      ⭐ Today: ${c.daily}<br>
+      ⭐ Total: ${c.total}<br>
+      ⭐ This Week: ${c.weekly}
+      <div class="progress">
+        <div class="progress-fill" style="width:${Math.min(c.weekly/WEEKLY_GOAL*100,100)}%;background:#66cc99"></div>
+      </div>
+    </div>
+  `;
 }
 
-let ex=extras[i];
-el.innerHTML+=`
-<div class="chore">
-<span>${ex[0]} ${ex[1]} <span class="value">⭐${ex[2]}</span></span>
-<button onclick="done(${i},${ex[2]})">✓</button>
-</div>`;
-
-el.innerHTML+=`
-<div class="summary">
-⭐ Today: ${c.daily}<br>
-⭐ Total: ${c.total}<br>
-⭐ This Week: ${c.weekly}
-<div class="progress">
-<div class="progress-fill" style="width:${Math.min(c.weekly/WEEKLY_GOAL*100,100)}%;background:#66cc99"></div>
-</div>
-</div>
-
-<div class="shop">
-<b>🎁 Reward Shop</b>
-<button onclick="redeemTreat(${i})">🍪 Treat – ⭐5 (max 2/day)</button>
-<button onclick="redeemYouTube(${i})">📺 YouTube Time – ⭐40 (Fri–Sun)</button>
-<button onclick="redeemWeekly(${i})">🎥 Movie Night – ⭐50 (Fri–Sun)</button>
-<button onclick="redeemWeekly(${i})">🎲 Board Game Night – ⭐50 (Fri–Sun)</button>
-</div>
-
-<div class="parent">
-<button onclick="parentReset(${i})">🔒 Parent Reset</button>
-</div>`;
-}
 
 function done(i,s){
 kids[i].daily+=s;
