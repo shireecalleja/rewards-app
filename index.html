@@ -10,8 +10,21 @@
 <style>
 body{font-family:Arial;background:#f2f7ff;margin:0;padding:10px}
 h1{text-align:center;font-size:32px;margin:8px 0 14px}
-.container{display:flex;flex-direction:column;gap:18px}
-.child{background:white;border-radius:24px;padding:14px}
+.container{
+  display:flex;
+  gap:18px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.child{
+  background:white;
+  border-radius:24px;
+  padding:14px;
+  width:320px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.12);
+}
+
 .child h2{position:sticky;top:0;background:white;margin:0;padding:6px 0 10px;text-align:center;font-size:24px;z-index:5}
 .header{font-size:20px;font-weight:bold;padding:10px;border-radius:16px;margin-top:14px;color:white;text-align:center}
 .morning{background:#ffb347}.afternoon{background:#87cefa}.evening{background:#9370db}
@@ -32,6 +45,7 @@ button{font-size:20px;border-radius:16px;border:none;padding:10px 16px;backgroun
 </head>
 
 <body>
+<div class="kids-container">
 
 <h1>⭐ Adam & Lachlan's Rewards Chart ⭐</h1>
 
