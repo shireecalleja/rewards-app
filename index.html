@@ -149,7 +149,7 @@ h1{text-align:center;margin-bottom:16px}
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js")
+    navigator.serviceWorker.register("/rewards-app/service-worker.js")
       .then(reg => console.log("Service Worker registered:", reg.scope))
       .catch(err => console.error("Service Worker registration failed:", err));
   });
