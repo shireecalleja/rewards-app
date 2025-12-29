@@ -235,6 +235,24 @@ h1{text-align:center;margin:10px 0}
 <audio id="starSound" src="https://assets.mixkit.co/sfx/preview/mixkit-bonus-earned-in-video-game-2058.mp3"></audio>
 <audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
 
+<!-- Firebase SDKs (COMPAT for plain HTML) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAd8mFhfCMW9WnSXGagQGG5aQwuguNMMfo",
+  authDomain: "rewards-app-12c6f.firebaseapp.com",
+  databaseURL: "https://rewards-app-12c6f-default-rtdb.firebaseio.com",
+  projectId: "rewards-app-12c6f",
+  storageBucket: "rewards-app-12c6f.appspot.com",
+  messagingSenderId: "460486497738",
+  appId: "1:460486497738:web:341802bd5f3bd627d12b33"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+</script>
+  
 <script>
 const PIN="9747";
 const DAILY_GOAL=15;
