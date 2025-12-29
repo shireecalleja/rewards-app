@@ -1,234 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Adam & Lachlan's Rewards Chart</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="manifest" href="manifest.json">
-
 <style>
-body{font-family:Arial;background:#f2f7ff;margin:0;padding:10px}
-h1{text-align:center;font-size:32px;margin:8px 0 14px}
+body{
+  font-family: Arial, sans-serif;
+  background:#f2f7ff;
+  margin:0;
+  padding:12px;
+}
+
+h1{
+  text-align:center;
+  font-size:32px;
+  margin:10px 0 20px;
+}
+
 .container{
   display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:18px;
-  max-width:100%;
-  padding:0 20px;
-  align-items:flex-start;
-  .avatar{
-  font-size:48px;
-  width:72px;
-  height:72px;
-  border-radius:50%;
-  background:#eef3ff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:8px auto;
-  box-shadow:0 4px 10px rgba(0,0,0,0.15);
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap:20px;
+  max-width:1100px;
+  margin:0 auto;
 }
 
-}
-
-/* Avatar must be OUTSIDE container */
-.avatar {
-  font-size:48px;
-  width:72px;
-  height:72px;
-  border-radius:50%;
-  background:#eef3ff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:0 auto 6px;
-}
-
-
-}
-
-
-
-.child{
-  background:white;
-  border-radius:24px;
-  padding:14px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.12);
-}
-
-
-.child h2{position:sticky;top:0;background:white;margin:0;padding:6px 0 10px;text-align:center;font-size:24px;z-index:5}
-.header{font-size:20px;font-weight:bold;padding:10px;border-radius:16px;margin-top:14px;color:white;text-align:center}
-.morning{background:#ffb347}.afternoon{background:#87cefa}.evening{background:#9370db}
-.chore{display:flex;justify-content:space-between;align-items:center;font-size:18px;margin:10px 0}
-.value{font-size:14px;color:#444;margin-left:6px}
-button{font-size:20px;border-radius:16px;border:none;padding:10px 16px;background:#ffd93d}
-.summary{margin-top:14px;padding:12px;background:#eef6ff;border-radius:18px;text-align:center;font-size:18px}
-.progress{height:22px;background:#ddd;border-radius:11px;overflow:hidden;margin-top:6px}
-.progress-fill{
-  height:100%;
-  transition: width 0.6s ease-in-out;
-}
-
-.shop{margin-top:12px;background:#fff4e6;border-radius:18px;padding:10px}
-.shop button{display:block;width:100%;margin-top:8px;background:#ff8fab;color:white}
-.parent{margin-top:12px;padding:10px;background:#ffeedd;border-radius:18px;text-align:center}
-.race{background:white;border-radius:20px;padding:12px;margin-bottom:16px}
-.track{height:24px;background:#ddd;border-radius:12px;overflow:hidden}
-.runner{height:100%;width:0%}
-#winner{display:none;position:fixed;inset:0;background:#000c;align-items:center;justify-content:center;color:white;font-size:32px;text-align:center;z-index:10;padding:20px}
-</style>
-</head>
-
-<body>
-<div class="kids-container">
-
-<h1>⭐ Adam & Lachlan's Rewards Chart ⭐</h1>
-
-<div class="race">
-<div style="font-size:22px">🏁 Today's Star Race</div>
-<div>Adam<div class="track"><div id="race0" class="runner" style="background:#4da6ff"></div></div></div>
-<div>Lachlan<div class="track"><div id="race1" class="runner" style="background:#66cc99"></div></div></div>
-</div>
-
-<div class="container">
-<div class="child" id="child0"></div>
-<div class="child" id="child1"></div>
-</div>
-
-<div id="winner"></div>
-
-<script>
-const PIN="9747";
-const DAILY_GOAL=15;
-const WEEKLY_GOAL=50;
-
-const kids = [
-  {name:"Adam", avatar:"🦁", daily:0,total:0,weekly:0,treatsToday:0},
-  {name:"Lachlan", avatar:"🐯", daily:0,total:0,weekly:0,treatsToday:0}
-];
-
-
-
-const chores={
-Morning:[["🛏️","Make bed",2],["👕","Get dressed",1],["🧼","Wash face",1],["🎒","Pack school bag",1]],
-Afternoon:[["🎒","Unpack school bag",1],["📚","Do homework",2],["🍽️","Set table",2]],
-Evening:[["🍽️","Clean table",1],["🚿","Shower & brush teeth",1],["🧸","Pack away toys",2]]
-};
-
-const extras=[["🍽️","Unload dishwasher",3],["🧺","Empty clothes baskets",3]];
-
-function isWeekend(){
-const d=new Date().getDay();
-return d===5||d===6||d===0;
-}
-
-function render(i){
-  let c = kids[i];
-  let el = document.getElementById("child"+i);
-
-  el.innerHTML = `
-    <div class="avatar">${i === 0 ? '🦁' : '🐯'}</div>
-    <h2>${c.name}</h2>
-  `;
-
-  for(let t in chores){
-    el.innerHTML += `<div class="header ${t.toLowerCase()}">${t}</div>`;
-    chores[t].forEach(ch=>{
-      el.innerHTML += `
-        <div class="chore">
-          <span>${ch[0]} ${ch[1]} <span class="value">⭐${ch[2]}</span></span>
-          <button onclick="done(${i},${ch[2]})">✓</button>
-        </div>`;
-    });
-  }
-
-  let ex = extras[i];
-  el.innerHTML += `
-    <div class="chore">
-      <span>${ex[0]} ${ex[1]} <span class="value">⭐${ex[2]}</span></span>
-      <button onclick="done(${i},${ex[2]})">✓</button>
-    </div>
-
-    <div class="summary">
-      ⭐ Today: ${c.daily}<br>
-      ⭐ Total: ${c.total}<br>
-      ⭐ This Week: ${c.weekly}
-      <div class="progress">
-        <div class="progress-fill" style="width:${Math.min(c.weekly/WEEKLY_GOAL*100,100)}%;background:#66cc99"></div>
-      </div>
-    </div>
-  `;
-}
-
-
-function done(i,s){
-kids[i].daily+=s;
-kids[i].total+=s;
-kids[i].weekly+=s;
-update();
-if(kids[i].daily>=DAILY_GOAL)win(i);
-}
-
-function redeemTreat(i){
-if(kids[i].treatsToday>=2) return alert("Treat limit reached today");
-if(kids[i].total<5) return alert("Not enough stars");
-let pin=prompt("Enter parent PIN:");
-if(pin===PIN){
-kids[i].total-=5;
-kids[i].treatsToday++;
-update();
-}else alert("Incorrect PIN");
-}
-
-function redeemYouTube(i){
-if(!isWeekend()) return alert("YouTube time is only available Fri–Sun");
-if(kids[i].total<40) return alert("Not enough stars");
-let pin=prompt("Enter parent PIN:");
-if(pin===PIN){
-kids[i].total-=40;
-update();
-}else alert("Incorrect PIN");
-}
-
-function redeemWeekly(i){
-if(!isWeekend()) return alert("Weekly rewards are only available Fri–Sun");
-if(kids[i].weekly<50) return alert("Keep going!");
-let pin=prompt("Enter parent PIN:");
-if(pin===PIN){
-kids[i].weekly-=50;
-update();
-}else alert("Incorrect PIN");
-}
-
-function parentReset(i){
-let pin=prompt("Enter parent PIN:");
-if(pin===PIN){
-kids[i].daily=0;kids[i].total=0;kids[i].weekly=0;kids[i].treatsToday=0;
-update();
-}else alert("Incorrect PIN");
-}
-
-function update(){
-kids.forEach((k,i)=>{
-document.getElementById("race"+i).style.width=Math.min(k.daily/DAILY_GOAL*100,100)+'%';
-render(i);
-});
-localStorage.setItem("kids",JSON.stringify(kids));
-}
-
-function win(i){
-let w=document.getElementById("winner");
-w.style.display="flex";
-w.textContent="🎉 "+kids[i].name+" Wins Today! 🎉";
-setTimeout(()=>w.style.display="none",4000);
-}
-
-let saved=localStorage.getItem("kids");
-if(saved)kids.splice(0,kids.length,...JSON.parse(saved));
-update();
-</script>
-
-</body>
-</html>
+.chil
