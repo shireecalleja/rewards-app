@@ -12,7 +12,28 @@ body{
   margin:0;
   padding:16px;
 }
-h1{text-align:center;margin-bottom:14px}
+h1{text-align:center;margin:10px 0}
+
+.race{
+  background:white;
+  border-radius:16px;
+  padding:12px;
+  margin-bottom:14px;
+}
+.track{
+  background:#ddd;
+  height:18px;
+  border-radius:10px;
+  overflow:hidden;
+  margin:6px 0;
+}
+.runner{
+  height:100%;
+  width:0%;
+  transition:width .4s ease;
+}
+.blue{background:#4da3ff}
+.green{background:#5ecf8e}
 
 .container{
   display:grid;
@@ -46,12 +67,7 @@ h1{text-align:center;margin-bottom:14px}
   transition:width .4s ease;
 }
 
-.blue{background:#4da3ff}
-.green{background:#5ecf8e}
-
-.section{
-  margin-top:12px;
-}
+.section{margin-top:12px}
 .section-title{
   text-align:center;
   color:white;
@@ -111,16 +127,39 @@ h1{text-align:center;margin-bottom:14px}
   border-radius:12px;
   cursor:pointer;
 }
+
+#winner{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#000c;
+  color:white;
+  font-size:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  z-index:10;
+}
 </style>
 </head>
 
 <body>
 
-<h1>⭐ Adam & Lachlan's Rewards Chart ⭐</h1>
+<h1>⭐ Rewards Chart ⭐</h1>
+
+<div class="race">
+  <b>🏁 Star Race</b>
+  Adam
+  <div class="track"><div id="race0" class="runner blue"></div></div>
+  Lachlan
+  <div class="track"><div id="race1" class="runner green"></div></div>
+</div>
 
 <div class="container">
 
-<div class="card" id="adam">
+<!-- ADAM -->
+<div class="card">
   <div class="avatar">👦🚀</div>
   <div class="name">Adam</div>
   <div class="progress"><span class="blue"></span></div>
@@ -151,12 +190,11 @@ h1{text-align:center;margin-bottom:14px}
     <div class="reward" onclick="redeem(0,50)">🎬 Movie Night – ⭐50</div>
   </div>
 
-  <div class="reset">
-    <button onclick="resetChild(0)">🔒 Parent Reset</button>
-  </div>
+  <div class="reset"><button onclick="resetChild(0)">🔒 Parent Reset</button></div>
 </div>
 
-<div class="card" id="lachlan">
+<!-- LACHLAN -->
+<div class="card">
   <div class="avatar">🐯</div>
   <div class="name">Lachlan</div>
   <div class="progress"><span class="green"></span></div>
@@ -187,58 +225,91 @@ h1{text-align:center;margin-bottom:14px}
     <div class="reward" onclick="redeem(1,50)">🎬 Movie Night – ⭐50</div>
   </div>
 
-  <div class="reset">
-    <button onclick="resetChild(1)">🔒 Parent Reset</button>
-  </div>
+  <div class="reset"><button onclick="resetChild(1)">🔒 Parent Reset</button></div>
 </div>
 
 </div>
+
+<div id="winner"></div>
+
+<audio id="starSound" src="https://assets.mixkit.co/sfx/preview/mixkit-bonus-earned-in-video-game-2058.mp3"></audio>
+<audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
 
 <script>
 const PIN="9747";
-const GOAL=15;
+const DAILY_GOAL=15;
 
-let kids = JSON.parse(localStorage.getItem("kids")) || [
-  {daily:0,total:0},
-  {daily:0,total:0}
-];
+let data = JSON.parse(localStorage.getItem("kids")) || {
+  kids:[{daily:0,total:0},{daily:0,total:0}],
+  lastDay:"",
+  lastWeek:""
+};
+
+function today(){return new Date().toDateString();}
+function week(){return new Date().getWeek?.()}
+
+function autoReset(){
+  const now = new Date();
+  if(data.lastDay !== today()){
+    data.kids.forEach(k=>k.daily=0);
+    data.lastDay=today();
+  }
+  if(now.getDay()===1 && data.lastWeek!==today()){
+    data.kids.forEach(k=>k.total=0);
+    data.lastWeek=today();
+  }
+}
 
 function addStar(i,val){
-  kids[i].daily+=val;
-  kids[i].total+=val;
+  autoReset();
+  data.kids[i].daily+=val;
+  data.kids[i].total+=val;
+  document.getElementById("starSound").play();
   save();
+  if(data.kids[i].daily>=DAILY_GOAL) win(i);
 }
 
 function redeem(i,cost){
-  if(kids[i].total<cost) return alert("Not enough stars");
+  if(data.kids[i].total<cost) return alert("Not enough stars");
   if(prompt("Enter parent PIN")===PIN){
-    kids[i].total-=cost;
+    data.kids[i].total-=cost;
     save();
   }
 }
 
 function resetChild(i){
   if(prompt("Enter parent PIN")===PIN){
-    kids[i].daily=0;
-    kids[i].total=0;
+    data.kids[i].daily=0;
+    data.kids[i].total=0;
     save();
   }
 }
 
+function win(i){
+  const w=document.getElementById("winner");
+  w.style.display="flex";
+  w.innerText=`🎉 ${i===0?"Adam":"Lachlan"} Wins Today! 🎉`;
+  document.getElementById("winSound").play();
+  setTimeout(()=>w.style.display="none",4000);
+}
+
 function save(){
-  localStorage.setItem("kids",JSON.stringify(kids));
+  localStorage.setItem("kids",JSON.stringify(data));
   render();
 }
 
 function render(){
-  kids.forEach((k,i)=>{
+  data.kids.forEach((k,i)=>{
     document.getElementById("stats"+i).innerHTML=
       `⭐ Today: ${k.daily}<br>⭐ Total: ${k.total}`;
     document.querySelectorAll(".progress span")[i]
-      .style.width=Math.min(k.daily/GOAL*100,100)+"%";
+      .style.width=Math.min(k.daily/DAILY_GOAL*100,100)+"%";
+    document.getElementById("race"+i)
+      .style.width=Math.min(k.daily/DAILY_GOAL*100,100)+"%";
   });
 }
 
+autoReset();
 render();
 </script>
 
