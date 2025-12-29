@@ -7,92 +7,157 @@
 
 <style>
 body{
-  font-family: Arial, sans-serif;
+  font-family:Arial, sans-serif;
   background:#f2f7ff;
   margin:0;
-  padding:16px;
+  padding:14px;
 }
 
 h1{
   text-align:center;
   font-size:32px;
-  margin-bottom:24px;
+  margin:10px 0 18px;
 }
 
 .container{
   display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap:24px;
-  max-width:1000px;
+  grid-template-columns:repeat(auto-fit, minmax(340px, 1fr));
+  gap:20px;
+  max-width:1200px;
   margin:0 auto;
 }
 
-.card{
+.child{
   background:white;
   border-radius:24px;
-  padding:20px;
-  box-shadow:0 12px 30px rgba(0,0,0,0.12);
+  padding:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.12);
 }
 
 .avatar{
-  width:80px;
-  height:80px;
+  width:72px;
+  height:72px;
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:40px;
-  margin:0 auto 10px;
-  animation:bounce 2s infinite;
+  font-size:36px;
+  margin:0 auto 6px;
 }
 
-@keyframes bounce{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
-}
-
-.name{
+.child h2{
   text-align:center;
-  font-size:22px;
+  margin:4px 0 10px;
+}
+
+.header{
+  font-size:18px;
   font-weight:bold;
+  padding:8px;
+  border-radius:14px;
+  margin-top:12px;
+  color:white;
+  text-align:center;
 }
 
-.progress{
-  height:18px;
-  background:#ddd;
-  border-radius:10px;
-  overflow:hidden;
-  margin:14px 0 20px;
-}
-
-.fill{
-  height:100%;
-  width:0%;
-  transition:width 0.6s ease;
-}
+.morning{background:#ffb347;}
+.afternoon{background:#87cefa;}
+.evening{background:#9370db;}
 
 .chore{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:8px 0;
-  border-bottom:1px dashed #ddd;
+  font-size:17px;
+  margin:8px 0;
+}
+
+.value{
+  font-size:14px;
+  color:#444;
 }
 
 button{
-  border:none;
-  border-radius:50%;
-  width:34px;
-  height:34px;
   font-size:18px;
-  cursor:pointer;
+  border:none;
+  border-radius:12px;
+  padding:6px 12px;
   background:#ffd93d;
+  cursor:pointer;
 }
 
-.stats{
+.summary{
+  margin-top:12px;
+  padding:10px;
+  background:#eef6ff;
+  border-radius:16px;
   text-align:center;
-  margin-top:16px;
-  font-size:16px;
+}
+
+.progress{
+  height:20px;
+  background:#ddd;
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:6px;
+}
+
+.progress-fill{
+  height:100%;
+  transition:width 0.5s ease;
+}
+
+.shop{
+  margin-top:12px;
+  background:#fff4e6;
+  border-radius:16px;
+  padding:10px;
+}
+
+.shop button{
+  display:block;
+  width:100%;
+  margin-top:6px;
+  background:#ff8fab;
+  color:white;
+}
+
+.parent{
+  margin-top:10px;
+  text-align:center;
+}
+
+.race{
+  background:white;
+  border-radius:20px;
+  padding:12px;
+  margin-bottom:18px;
+}
+
+.track{
+  height:22px;
+  background:#ddd;
+  border-radius:11px;
+  overflow:hidden;
+}
+
+.runner{
+  height:100%;
+  width:0%;
+  transition:width 0.5s ease;
+}
+
+#winner{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#000c;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:32px;
+  text-align:center;
+  z-index:10;
 }
 </style>
 </head>
@@ -101,61 +166,127 @@ button{
 
 <h1>⭐ Adam & Lachlan's Rewards Chart ⭐</h1>
 
-<div class="container">
-
-  <!-- Adam -->
-  <div class="card">
-    <div class="avatar" style="background:#e0f0ff">🧑‍🚀</div>
-    <div class="name">Adam</div>
-    <div class="progress">
-      <div id="bar0" class="fill" style="background:#4da6ff"></div>
-    </div>
-
-    <div class="chore">🛏️ Make bed ⭐⭐ <button onclick="add(0,2)">✓</button></div>
-    <div class="chore">👕 Get dressed ⭐ <button onclick="add(0,1)">✓</button></div>
-    <div class="chore">📚 Homework ⭐⭐ <button onclick="add(0,2)">✓</button></div>
-
-    <div class="stats" id="stats0">Today: 0 ⭐</div>
-  </div>
-
-  <!-- Lachlan -->
-  <div class="card">
-    <div class="avatar" style="background:#e6fff2">🐯</div>
-    <div class="name">Lachlan</div>
-    <div class="progress">
-      <div id="bar1" class="fill" style="background:#5fcf90"></div>
-    </div>
-
-    <div class="chore">🎒 Pack bag ⭐ <button onclick="add(1,1)">✓</button></div>
-    <div class="chore">🍽️ Set table ⭐⭐ <button onclick="add(1,2)">✓</button></div>
-    <div class="chore">🧸 Clean toys ⭐⭐ <button onclick="add(1,2)">✓</button></div>
-
-    <div class="stats" id="stats1">Today: 0 ⭐</div>
-  </div>
-
+<div class="race">
+  <b>🏁 Today's Star Race</b>
+  <div>Adam<div class="track"><div id="race0" class="runner" style="background:#4da6ff"></div></div></div>
+  <div>Lachlan<div class="track"><div id="race1" class="runner" style="background:#66cc99"></div></div></div>
 </div>
 
+<div class="container">
+  <div class="child" id="child0"></div>
+  <div class="child" id="child1"></div>
+</div>
+
+<div id="winner"></div>
+
 <script>
-const GOAL = 10;
+const PIN = "9747";
+const DAILY_GOAL = 15;
+const WEEKLY_GOAL = 50;
 
 const kids = [
-  {stars:0},
-  {stars:0}
+  {name:"Adam", avatar:"🧑‍🚀", daily:0, weekly:0, total:0, treats:0},
+  {name:"Lachlan", avatar:"🐯", daily:0, weekly:0, total:0, treats:0}
 ];
 
-function add(i, val){
-  kids[i].stars += val;
+const chores = {
+  Morning:[["🛏️ Make bed",2],["👕 Get dressed",1]],
+  Afternoon:[["📚 Homework",2],["🍽️ Set table",2]],
+  Evening:[["🧸 Tidy toys",2],["🚿 Brush teeth",1]]
+};
+
+function render(i){
+  const k = kids[i];
+  const el = document.getElementById("child"+i);
+  el.innerHTML = `
+    <div class="avatar">${k.avatar}</div>
+    <h2>${k.name}</h2>
+
+    <div class="progress">
+      <div class="progress-fill" style="width:${Math.min(k.daily/DAILY_GOAL*100,100)}%;background:#66cc99"></div>
+    </div>
+  `;
+
+  for(let section in chores){
+    el.innerHTML += `<div class="header ${section.toLowerCase()}">${section}</div>`;
+    chores[section].forEach(c=>{
+      el.innerHTML += `
+        <div class="chore">
+          <span>${c[0]} <span class="value">⭐${c[1]}</span></span>
+          <button onclick="done(${i},${c[1]})">✓</button>
+        </div>`;
+    });
+  }
+
+  el.innerHTML += `
+    <div class="summary">
+      ⭐ Today: ${k.daily}<br>
+      ⭐ This Week: ${k.weekly}<br>
+      ⭐ Total: ${k.total}
+    </div>
+
+    <div class="shop">
+      <b>🎁 Rewards</b>
+      <button onclick="treat(${i})">🍪 Treat – ⭐5</button>
+      <button onclick="weekly(${i})">🎥 Movie Night – ⭐50</button>
+    </div>
+
+    <div class="parent">
+      <button onclick="reset(${i})">🔒 Parent Reset</button>
+    </div>
+  `;
+}
+
+function done(i,s){
+  kids[i].daily+=s;
+  kids[i].weekly+=s;
+  kids[i].total+=s;
   update();
+  if(kids[i].daily>=DAILY_GOAL) win(i);
+}
+
+function treat(i){
+  if(kids[i].total<5) return alert("Not enough stars");
+  if(prompt("Enter PIN")===PIN){
+    kids[i].total-=5;
+    update();
+  }
+}
+
+function weekly(i){
+  if(kids[i].weekly<50) return alert("Not enough weekly stars");
+  if(prompt("Enter PIN")===PIN){
+    kids[i].weekly-=50;
+    update();
+  }
+}
+
+function reset(i){
+  if(prompt("Enter PIN")===PIN){
+    kids[i].daily=kids[i].weekly=kids[i].total=0;
+    update();
+  }
 }
 
 function update(){
   kids.forEach((k,i)=>{
-    const pct = Math.min((k.stars / GOAL) * 100, 100);
-    document.getElementById("bar"+i).style.width = pct + "%";
-    document.getElementById("stats"+i).textContent =
-      `Today: ${k.stars} ⭐`;
+    document.getElementById("race"+i).style.width =
+      Math.min(k.daily/DAILY_GOAL*100,100)+"%";
+    render(i);
   });
+  localStorage.setItem("kids",JSON.stringify(kids));
 }
+
+function win(i){
+  const w=document.getElementById("winner");
+  w.style.display="flex";
+  w.textContent=`🎉 ${kids[i].name} Wins Today! 🎉`;
+  setTimeout(()=>w.style.display="none",4000);
+}
+
+const saved = localStorage.getItem("kids");
+if(saved) kids.splice(0,kids.length,...JSON.parse(saved));
+update();
 </script>
 
 </body>
