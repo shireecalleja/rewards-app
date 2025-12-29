@@ -1,15 +1,162 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Test Page</title>
+<meta charset="UTF-8">
+<title>Adam & Lachlan's Rewards Chart</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f2f7ff;
+  margin:0;
+  padding:16px;
+}
+
+h1{
+  text-align:center;
+  font-size:32px;
+  margin-bottom:24px;
+}
+
+.container{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap:24px;
+  max-width:1000px;
+  margin:0 auto;
+}
+
+.card{
+  background:white;
+  border-radius:24px;
+  padding:20px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.12);
+}
+
+.avatar{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+  margin:0 auto 10px;
+  animation:bounce 2s infinite;
+}
+
+@keyframes bounce{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+.name{
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.progress{
+  height:18px;
+  background:#ddd;
+  border-radius:10px;
+  overflow:hidden;
+  margin:14px 0 20px;
+}
+
+.fill{
+  height:100%;
+  width:0%;
+  transition:width 0.6s ease;
+}
+
+.chore{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px 0;
+  border-bottom:1px dashed #ddd;
+}
+
+button{
+  border:none;
+  border-radius:50%;
+  width:34px;
+  height:34px;
+  font-size:18px;
+  cursor:pointer;
+  background:#ffd93d;
+}
+
+.stats{
+  text-align:center;
+  margin-top:16px;
+  font-size:16px;
+}
+</style>
 </head>
+
 <body>
-  <h1 style="color:red;text-align:center;">
-    🚨 IF YOU SEE THIS, THE PAGE IS WORKING 🚨
-  </h1>
-  <p style="text-align:center;">
-    GitHub Pages is loading correctly.
-  </p>
+
+<h1>⭐ Adam & Lachlan's Rewards Chart ⭐</h1>
+
+<div class="container">
+
+  <!-- Adam -->
+  <div class="card">
+    <div class="avatar" style="background:#e0f0ff">🧑‍🚀</div>
+    <div class="name">Adam</div>
+    <div class="progress">
+      <div id="bar0" class="fill" style="background:#4da6ff"></div>
+    </div>
+
+    <div class="chore">🛏️ Make bed ⭐⭐ <button onclick="add(0,2)">✓</button></div>
+    <div class="chore">👕 Get dressed ⭐ <button onclick="add(0,1)">✓</button></div>
+    <div class="chore">📚 Homework ⭐⭐ <button onclick="add(0,2)">✓</button></div>
+
+    <div class="stats" id="stats0">Today: 0 ⭐</div>
+  </div>
+
+  <!-- Lachlan -->
+  <div class="card">
+    <div class="avatar" style="background:#e6fff2">🐯</div>
+    <div class="name">Lachlan</div>
+    <div class="progress">
+      <div id="bar1" class="fill" style="background:#5fcf90"></div>
+    </div>
+
+    <div class="chore">🎒 Pack bag ⭐ <button onclick="add(1,1)">✓</button></div>
+    <div class="chore">🍽️ Set table ⭐⭐ <button onclick="add(1,2)">✓</button></div>
+    <div class="chore">🧸 Clean toys ⭐⭐ <button onclick="add(1,2)">✓</button></div>
+
+    <div class="stats" id="stats1">Today: 0 ⭐</div>
+  </div>
+
+</div>
+
+<script>
+const GOAL = 10;
+
+const kids = [
+  {stars:0},
+  {stars:0}
+];
+
+function add(i, val){
+  kids[i].stars += val;
+  update();
+}
+
+function update(){
+  kids.forEach((k,i)=>{
+    const pct = Math.min((k.stars / GOAL) * 100, 100);
+    document.getElementById("bar"+i).style.width = pct + "%";
+    document.getElementById("stats"+i).textContent =
+      `Today: ${k.stars} ⭐`;
+  });
+}
+</script>
+
 </body>
 </html>
