@@ -21,9 +21,9 @@ h1{
 
 .container{
   display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   gap:20px;
-  max-width:1100px;
+  max-width:1200px;
   margin:0 auto;
 }
 
@@ -34,95 +34,77 @@ h1{
   box-shadow:0 10px 25px rgba(0,0,0,0.12);
 }
 
+.child h2{
+  text-align:center;
+  margin:8px 0;
+}
+
 .avatar{
   width:72px;
   height:72px;
   border-radius:50%;
-  font-size:42px;
+  background:#eef3ff;
   display:flex;
   align-items:center;
   justify-content:center;
-  margin:0 auto 8px;
-  background:#eef3ff;
-  animation:bounce 2s infinite;
+  font-size:40px;
+  margin:0 auto 6px;
 }
 
-@keyframes bounce{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-6px);}
+.section{
+  margin-top:12px;
 }
 
-.name{
-  text-align:center;
-  font-size:20px;
+.header{
+  padding:10px;
+  border-radius:14px;
+  color:white;
   font-weight:bold;
+  text-align:center;
+}
+
+.morning{background:#ffb347;}
+.afternoon{background:#87cefa;}
+.evening{background:#9370db;}
+
+.chore{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:10px 0;
+  font-size:18px;
+}
+
+button{
+  font-size:18px;
+  border:none;
+  border-radius:12px;
+  padding:8px 14px;
+  background:#ffd93d;
+  cursor:pointer;
+}
+
+.summary{
+  background:#eef6ff;
+  border-radius:16px;
+  padding:12px;
+  margin-top:14px;
+  text-align:center;
 }
 
 .progress{
-  background:#e0e0e0;
-  border-radius:20px;
+  height:20px;
+  background:#ddd;
+  border-radius:10px;
   overflow:hidden;
-  height:18px;
-  margin:12px 0;
+  margin-top:6px;
 }
 
-.bar{
+.progress-fill{
   height:100%;
-  width:0%;
-  transition:width 0.6s ease;
+  transition:width 0.5s ease;
 }
 
-.adam{background:#4da3ff;}
-.lachlan{background:#5bcf8e;}
-
-.tasks{
-  list-style:none;
-  padding:0;
-  margin:0;
-}
-
-.tasks li{
-  display:flex;
-  justify-content:space-between;
-  padding:8px 0;
-  border-bottom:1px dashed #ddd;
-}
-</style>
-</head>
-
-<body>
-
-<h1>⭐ Adam & Lachlan's Rewards Chart ⭐</h1>
-
-<div class="container">
-
-  <div class="child">
-    <div class="avatar">🦸‍♂️</div>
-    <div class="name">Adam</div>
-    <div class="progress">
-      <div class="bar adam" style="width:40%"></div>
-    </div>
-    <ul class="tasks">
-      <li>Make bed ⭐⭐</li>
-      <li>Get dressed ⭐</li>
-      <li>Homework ⭐⭐</li>
-    </ul>
-  </div>
-
-  <div class="child">
-    <div class="avatar">🐯</div>
-    <div class="name">Lachlan</div>
-    <div class="progress">
-      <div class="bar lachlan" style="width:65%"></div>
-    </div>
-    <ul class="tasks">
-      <li>Pack bag ⭐</li>
-      <li>Set table ⭐⭐</li>
-      <li>Clean toys ⭐⭐</li>
-    </ul>
-  </div>
-
-</div>
-
-</body>
-</html>
+.race{
+  background:white;
+  b
