@@ -7,33 +7,16 @@
 
 <style>
 body{
-  font-family:Arial, sans-serif;
+  font-family: Arial, sans-serif;
   background:#f2f7ff;
   margin:0;
   padding:16px;
 }
-h1{text-align:center;margin:10px 0}
 
-.race{
-  background:white;
-  border-radius:16px;
-  padding:12px;
-  margin-bottom:14px;
+h1{
+  text-align:center;
+  margin:10px 0 20px;
 }
-.track{
-  background:#ddd;
-  height:18px;
-  border-radius:10px;
-  overflow:hidden;
-  margin:6px 0;
-}
-.runner{
-  height:100%;
-  width:0%;
-  transition:width .4s ease;
-}
-.blue{background:#4da3ff}
-.green{background:#5ecf8e}
 
 .container{
   display:grid;
@@ -50,16 +33,26 @@ h1{text-align:center;margin:10px 0}
   box-shadow:0 10px 25px rgba(0,0,0,.1);
 }
 
-.avatar{text-align:center;font-size:42px}
-.name{text-align:center;font-weight:bold;font-size:22px}
+.avatar{
+  text-align:center;
+  font-size:44px;
+}
+
+.name{
+  text-align:center;
+  font-weight:bold;
+  font-size:22px;
+  margin-bottom:8px;
+}
 
 .progress{
   background:#ddd;
   height:14px;
   border-radius:10px;
   overflow:hidden;
-  margin:10px 0;
+  margin-bottom:12px;
 }
+
 .progress span{
   display:block;
   height:100%;
@@ -67,7 +60,13 @@ h1{text-align:center;margin:10px 0}
   transition:width .4s ease;
 }
 
-.section{margin-top:12px}
+.blue{background:#4da3ff}
+.green{background:#5ecf8e}
+
+.section{
+  margin-top:12px;
+}
+
 .section-title{
   text-align:center;
   color:white;
@@ -75,6 +74,7 @@ h1{text-align:center;margin:10px 0}
   padding:6px;
   border-radius:12px;
 }
+
 .morning{background:#ffb74d}
 .afternoon{background:#81c8f8}
 .evening{background:#9575cd}
@@ -85,6 +85,7 @@ h1{text-align:center;margin:10px 0}
   align-items:center;
   padding:6px 0;
 }
+
 .task button{
   border:none;
   background:#ffd54f;
@@ -109,6 +110,7 @@ h1{text-align:center;margin:10px 0}
   border-radius:12px;
   margin-top:10px;
 }
+
 .reward{
   background:#ff8fa3;
   color:white;
@@ -119,7 +121,11 @@ h1{text-align:center;margin:10px 0}
   cursor:pointer;
 }
 
-.reset{text-align:center;margin-top:10px}
+.reset{
+  text-align:center;
+  margin-top:10px;
+}
+
 .reset button{
   background:#ffd54f;
   border:none;
@@ -148,21 +154,13 @@ h1{text-align:center;margin:10px 0}
 
 <h1>⭐ Rewards Chart ⭐</h1>
 
-<div class="race">
-  <b>🏁 Star Race</b>
-  Adam
-  <div class="track"><div id="race0" class="runner blue"></div></div>
-  Lachlan
-  <div class="track"><div id="race1" class="runner green"></div></div>
-</div>
-
 <div class="container">
 
 <!-- ADAM -->
 <div class="card">
   <div class="avatar">👦🚀</div>
   <div class="name">Adam</div>
-  <div class="progress"><span class="blue"></span></div>
+  <div class="progress"><span id="prog0" class="blue"></span></div>
 
   <div class="section">
     <div class="section-title morning">Morning</div>
@@ -197,7 +195,7 @@ h1{text-align:center;margin:10px 0}
 <div class="card">
   <div class="avatar">🐯</div>
   <div class="name">Lachlan</div>
-  <div class="progress"><span class="green"></span></div>
+  <div class="progress"><span id="prog1" class="green"></span></div>
 
   <div class="section">
     <div class="section-title morning">Morning</div>
@@ -232,62 +230,17 @@ h1{text-align:center;margin:10px 0}
 
 <div id="winner"></div>
 
-<audio id="starSound" src="https://assets.mixkit.co/sfx/preview/mixkit-bonus-earned-in-video-game-2058.mp3"></audio>
-<audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
-
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyAd8mFhfCMW9WnSXGagQGG5aQwuguNMMfo",
-    authDomain: "rewards-app-12c6f.firebaseapp.com",
-    projectId: "rewards-app-12c6f",
-    storageBucket: "rewards-app-12c6f.firebasestorage.app",
-    messagingSenderId: "460486497738",
-    appId: "1:460486497738:web:341802bd5f3bd627d12b33",
-    measurementId: "G-983XETJT1Z"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
 <script>
 const PIN="9747";
 const DAILY_GOAL=15;
 
 let data = JSON.parse(localStorage.getItem("kids")) || {
-  kids:[{daily:0,total:0},{daily:0,total:0}],
-  lastDay:"",
-  lastWeek:""
+  kids:[{daily:0,total:0},{daily:0,total:0}]
 };
 
-function today(){return new Date().toDateString();}
-function week(){return new Date().getWeek?.()}
-
-function autoReset(){
-  const now = new Date();
-  if(data.lastDay !== today()){
-    data.kids.forEach(k=>k.daily=0);
-    data.lastDay=today();
-  }
-  if(now.getDay()===1 && data.lastWeek!==today()){
-    data.kids.forEach(k=>k.total=0);
-    data.lastWeek=today();
-  }
-}
-
 function addStar(i,val){
-  autoReset();
   data.kids[i].daily+=val;
   data.kids[i].total+=val;
-  document.getElementById("starSound").play();
   save();
   if(data.kids[i].daily>=DAILY_GOAL) win(i);
 }
@@ -312,7 +265,6 @@ function win(i){
   const w=document.getElementById("winner");
   w.style.display="flex";
   w.innerText=`🎉 ${i===0?"Adam":"Lachlan"} Wins Today! 🎉`;
-  document.getElementById("winSound").play();
   setTimeout(()=>w.style.display="none",4000);
 }
 
@@ -325,14 +277,11 @@ function render(){
   data.kids.forEach((k,i)=>{
     document.getElementById("stats"+i).innerHTML=
       `⭐ Today: ${k.daily}<br>⭐ Total: ${k.total}`;
-    document.querySelectorAll(".progress span")[i]
-      .style.width=Math.min(k.daily/DAILY_GOAL*100,100)+"%";
-    document.getElementById("race"+i)
-      .style.width=Math.min(k.daily/DAILY_GOAL*100,100)+"%";
+    document.getElementById("prog"+i).style.width=
+      Math.min(k.daily/DAILY_GOAL*100,100)+"%";
   });
 }
 
-autoReset();
 render();
 </script>
 
