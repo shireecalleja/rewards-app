@@ -15,9 +15,24 @@ h1{text-align:center;font-size:32px;margin:8px 0 14px}
   grid-template-columns: 1fr 1fr;
   gap:18px;
   max-width:100%;
-padding: 0 20px;
+  padding:0 20px;
+  align-items:flex-start;
+}
 
-  align-items: flex-start;
+/* Avatar must be OUTSIDE container */
+.avatar {
+  font-size:48px;
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  background:#eef3ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 6px;
+}
+
+
 }
 
 
@@ -73,9 +88,18 @@ const DAILY_GOAL=15;
 const WEEKLY_GOAL=50;
 
 const kids=[
-{name:"Adam",daily:0,total:0,weekly:0,treatsToday:0},
-{name:"Lachlan",daily:0,total:0,weekly:0,treatsToday:0}
+{
+  name:"Adam",
+  avatar:"👦",
+  daily:0,total:0,weekly:0,treatsToday:0
+},
+{
+  name:"Lachlan",
+  avatar:"🧒",
+  daily:0,total:0,weekly:0,treatsToday:0
+}
 ];
+
 
 const chores={
 Morning:[["🛏️","Make bed",2],["👕","Get dressed",1],["🧼","Wash face",1],["🎒","Pack school bag",1]],
@@ -93,7 +117,11 @@ return d===5||d===6||d===0;
 function render(i){
 let c=kids[i];
 let el=document.getElementById("child"+i);
-el.innerHTML='<h2>'+c.name+'</h2>';
+el.innerHTML=`
+<div class="avatar">${c.avatar}</div>
+<h2>${c.name}</h2>
+`;
+
 
 for(let t in chores){
 el.innerHTML+='<div class="header '+t.toLowerCase()+'">'+t+'</div>';
