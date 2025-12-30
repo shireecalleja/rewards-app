@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <title>Adam & Lachlan Rewards Chart</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-<link rel="manifest" href="manifest.json">
 
 <style>
 body{
@@ -398,37 +396,12 @@ function isWeekend(){
   return d===5||d===6||d===0;
 }
 
-<script>
-function autoReset() {
-  const now = new Date();
-
-  const todayStr = now.toDateString();
-
-  // 🔁 DAILY RESET (12:00am)
-  if (data.lastDay !== todayStr) {
-    data.kids.forEach(k => k.daily = 0);
-    data.lastDay = todayStr;
-
-    // 🔄 VISUAL RESET — uncheck all tasks
-    document.querySelectorAll(".check.done").forEach(btn => {
-      btn.classList.remove("done");
-    });
+function autoReset(){
+  const now=today();
+  if(data.lastDay!==now){
+    data.kids.forEach(k=>k.daily=0);
+    data.lastDay=now;
   }
-
-  // 🔁 WEEKLY RESET — Monday 12:00am
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
-  monday.setHours(0, 0, 0, 0);
-
-  const mondayStr = monday.toDateString();
-
-  if (data.lastWeek !== mondayStr) {
-    data.kids.forEach(k => k.total = 0);
-    data.lastWeek = mondayStr;
-  }
-}
-</script>
-
   const monday = new Date();
   monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
   if(data.lastWeek!==monday.toDateString()){
@@ -469,39 +442,12 @@ function win(i){
   setTimeout(()=>w.style.display="none",4000);
 }
 
-<script>
+ function toggleTask(btn, childIndex, stars){
+  if(btn.classList.contains("checked")) return;
 
-  function vibrate() {
-  if ("vibrate" in navigator) {
-    navigator.vibrate(40);
-  }
+  btn.classList.add("checked");
+  addStar(childIndex, stars);
 }
-  
-function toggleTask(btn, childIndex, stars) {
-
-  // ✅ CHECK task
-  if (!btn.classList.contains("done")) {
-    btn.classList.add("done");
-    addStar(childIndex, stars);
-    vibrate();
-    return;
-  }
-
-  // 🔒 UNCHECK (parent only)
-  const pin = prompt("Parent PIN to uncheck:");
-  if (pin !== PIN) return;
-
-  btn.classList.remove("done");
-
-  data.kids[childIndex].daily -= stars;
-  data.kids[childIndex].total -= stars;
-
-  if (data.kids[childIndex].daily < 0) data.kids[childIndex].daily = 0;
-  if (data.kids[childIndex].total < 0) data.kids[childIndex].total = 0;
-
-  save();
-}
-</script>
 
 function save(){
   localStorage.setItem("kidsData",JSON.stringify(data));
