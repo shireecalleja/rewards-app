@@ -5,11 +5,7 @@
 <title>Adam & Lachlan Rewards Chart</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <button onclick="navigator.vibrate(200)">
-  Test Vibration
-</button>
-
-<style>
+ <style>
 body{
   font-family:Arial, sans-serif;
   background:#f2f7ff;
@@ -218,22 +214,26 @@ if ("serviceWorker" in navigator) {
 
     <div class="task">
       <span>👕 Get dressed ⭐1</span>
-      <button class="check" onclick="toggleTask(this,0,1)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,0,1)"></button>
     </div>
 
     <div class="task">
       <span>🛏️ Make bed ⭐1</span>
-      <button class="check" onclick="toggleTask(this,0,1)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,0,1)"></button>
     </div>
 
     <div class="task">
       <span>🧼 Wash face & moisturise ⭐1</span>
-      <button class="check" onclick="toggleTask(this,0,1)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,0,1)"></button>
     </div>
 
     <div class="task">
       <span>🎒 Pack school bag ⭐1</span>
-      <button class="check" onclick="toggleTask(this,0,1)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,0,1)"></button>
     </div>
   </div>
 
@@ -243,22 +243,26 @@ if ("serviceWorker" in navigator) {
 
     <div class="task">
       <span>🎒 Unpack school bag ⭐2</span>
-      <button class="check" onclick="toggleTask(this,0,2)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,0,2)"></button>
     </div>
 
     <div class="task">
       <span>📚 Homework ⭐2</span>
-      <button class="check" onclick="toggleTask(this,0,2)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,0,2)"></button>
     </div>
 
     <div class="task">
       <span>🍽️ Set table ⭐2</span>
-      <button class="check" onclick="toggleTask(this,0,2)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,0,2)"></button>
     </div>
 
     <div class="task">
       <span>📖 10 min reading ⭐3</span>
-      <button class="check" onclick="toggleTask(this,0,3)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,0,2)"></button>
     </div>
   </div>
 
@@ -268,12 +272,14 @@ if ("serviceWorker" in navigator) {
 
   <div class="task">
     <span>🍽️ Clean table ⭐1</span>
-    <button class="check" onclick="toggleTask(this,0,1)"></button>
+    <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,0,3)"></button>
   </div>
 
   <div class="task">
     <span>🚿 Shower & brush teeth ⭐1</span>
-    <button class="check" onclick="toggleTask(this,0,1)"></button>
+    <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,0,3)"></button>
   </div>
 
   <div class="task">
@@ -306,7 +312,8 @@ if ("serviceWorker" in navigator) {
 
     <div class="task">
       <span>👕 Get dressed ⭐1</span>
-      <button class="check" onclick="toggleTask(this,1,1)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,1,1)"></button>
     </div>
 
     <div class="task">
@@ -316,12 +323,14 @@ if ("serviceWorker" in navigator) {
 
     <div class="task">
       <span>🧼 Wash face & moisturise ⭐1</span>
-      <button class="check" onclick="toggleTask(this,1,1)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,1,1)"></button>
     </div>
 
     <div class="task">
       <span>🎒 Pack school bag ⭐1</span>
-      <button class="check" onclick="toggleTask(this,1,1)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,1,1)"></button>
     </div>
   </div>
 
@@ -331,22 +340,26 @@ if ("serviceWorker" in navigator) {
 
     <div class="task">
       <span>🎒 Unpack school bag ⭐2</span>
-      <button class="check" onclick="toggleTask(this,1,2)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,1,2)"></button>
     </div>
 
     <div class="task">
       <span>📚 Homework ⭐2</span>
-      <button class="check" onclick="toggleTask(this,1,2)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,1,2)"></button>
     </div>
 
     <div class="task">
       <span>🍽️ Set table ⭐2</span>
-      <button class="check" onclick="toggleTask(this,1,2)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,1,2)"></button>
     </div>
 
     <div class="task">
       <span>📖 10 min reading ⭐3</span>
-      <button class="check" onclick="toggleTask(this,1,3)"></button>
+      <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,1,2)"></button>
     </div>
   </div>
 
@@ -356,17 +369,20 @@ if ("serviceWorker" in navigator) {
 
   <div class="task">
     <span>🍽️ Clean table ⭐1</span>
-    <button class="check" onclick="toggleTask(this,1,1)"></button>
+    <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,1,3)"></button>
   </div>
 
   <div class="task">
     <span>🚿 Shower & brush teeth ⭐1</span>
-    <button class="check" onclick="toggleTask(this,1,1)"></button>
+    <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,1,3)"></button>
   </div>
 
   <div class="task">
     <span>🧺 Put laundry away ⭐3</span>
-    <button class="check" onclick="toggleTask(this,1,3)"></button>
+    <button class="check" data-id="adam-morning-1"
+        onclick="toggleTask(this,1,3)"></button>
   </div>
 </div>
 
@@ -447,15 +463,16 @@ function win(i){
 }
 
  function toggleTask(btn, childIndex, stars){
-  // Android haptic feedback (safe on desktop)
-  if (navigator.vibrate) {
-    navigator.vibrate(30); // short tap
-  }
-
-  if (btn.classList.contains("checked")) return;
+  if(btn.classList.contains("checked")) return;
 
   btn.classList.add("checked");
   addStar(childIndex, stars);
+
+  // save this specific task
+  localStorage.setItem(
+    "task-" + btn.dataset.id,
+    "checked"
+  );
 }
 
 function save(){
@@ -476,6 +493,14 @@ function render(){
 
 autoReset();
 render();
+  
+document.querySelectorAll(".check").forEach(btn => {
+  const saved = localStorage.getItem("task-" + btn.dataset.id);
+  if (saved === "checked") {
+    btn.classList.add("checked");
+  }
+});
+
 </script>
 <script>
 function toggleTask(btn, childIndex, stars){
