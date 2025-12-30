@@ -443,7 +443,12 @@ function win(i){
 }
 
  function toggleTask(btn, childIndex, stars){
-  if(btn.classList.contains("checked")) return;
+  // Android haptic feedback (safe on desktop)
+  if (navigator.vibrate) {
+    navigator.vibrate(30); // short tap
+  }
+
+  if (btn.classList.contains("checked")) return;
 
   btn.classList.add("checked");
   addStar(childIndex, stars);
