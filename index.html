@@ -489,6 +489,8 @@ function render(){
 
 autoReset();
 render();
+loadCheckedState();
+
   
 document.querySelectorAll(".check").forEach(btn => {
   const saved = localStorage.getItem("task-" + btn.dataset.id);
@@ -500,11 +502,30 @@ document.querySelectorAll(".check").forEach(btn => {
 </script>
 <script>
 function toggleTask(btn, childIndex, stars){
-  if(btn.classList.contains("done")) return; // already checked
+  if(btn.classList.contains("done")) return;
 
   btn.classList.add("done");
   addStar(childIndex, stars);
+  saveCheckedState();
 }
+
+ function saveCheckedState() {
+  const checked = {};
+  document.querySelectorAll(".check.done").forEach(btn => {
+    checked[btn.dataset.id] = true;
+  });
+  localStorage.setItem("checkedTasks", JSON.stringify(checked));
+}
+
+function loadCheckedState() {
+  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+  document.querySelectorAll(".check").forEach(btn => {
+    if (checked[btn.dataset.id]) {
+      btn.classList.add("done");
+    }
+  });
+}
+
 </script>
 </body>
 </html>
