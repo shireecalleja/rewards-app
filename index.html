@@ -180,38 +180,45 @@ if ("serviceWorker" in navigator) {
 
   <div class="task">
     <span>👕 Get dressed ⭐1</span>
-    <button onclick="addStar(0,1)">✓</button>
+   <button class="check" onclick="toggleTask(this,0,1)"></button>
   </div>
 
   <div class="task">
     <span>🛏️ Make bed ⭐1</span>
-    <button onclick="addStar(0,1)">✓</button>
+    <button class="check" onclick="toggleTask(this,0,1)"></button>
   </div>
 
   <div class="task">
     <span>🧼 Wash face & moisturise ⭐1</span>
-    <button onclick="addStar(0,1)">✓</button>
+    <button class="check" onclick="toggleTask(this,0,1)"></button>
   </div>
 
   <div class="task">
     <span>🎒 Pack school bag ⭐1</span>
-    <button onclick="addStar(0,1)">✓</button>
+    <button class="check" onclick="toggleTask(this,0,1)"></button>
   </div>
 </div>
   
   <div class="section">
     <div class="section-title afternoon">Afternoon</div>
-    <div class="task"><span>🎒 Unpack school bag ⭐2</span><button onclick="addStar(0,2)">✓</button></div>
-    <div class="task"><span>📚 Homework ⭐2</span><button onclick="addStar(0,2)">✓</button></div>
-    <div class="task"><span>🍽️ Set table ⭐2</span><button onclick="addStar(0,2)">✓</button></div>
-    <div class="task"><span>📖 10 min reading ⭐3</span><button onclick="addStar(0,3)">✓</button></div>
+    <div class="task"><span>🎒 Unpack school bag ⭐2</span><button class="check" onclick="toggleTask(this,0,1)"></button>
+</div>
+    <div class="task"><span>📚 Homework ⭐2</span><button class="check" onclick="toggleTask(this,0,1)"></button>
+</div>
+    <div class="task"><span>🍽️ Set table ⭐2</span><button class="check" onclick="toggleTask(this,0,1)"></button>
+</div>
+    <div class="task"><span>📖 10 min reading ⭐3</span><button class="check" onclick="toggleTask(this,0,1)"></button>
+</div>
   </div>
 
   <div class="section">
     <div class="section-title evening">Evening</div>
-    <div class="task"><span>🍽️ Clean table ⭐1</span><button onclick="addStar(0,1)">✓</button></div>
-    <div class="task"><span>🚿 Shower & brush teeth ⭐1</span><button onclick="addStar(0,1)">✓</button></div>
-    <div class="task"><span>🍽️ Unload dishwasher ⭐3</span><button onclick="addStar(0,3)">✓</button></div>
+    <div class="task"><span>🍽️ Clean table ⭐1</span><button class="check" onclick="toggleTask(this,0,1)"></button>
+</div>
+    <div class="task"><span>🚿 Shower & brush teeth ⭐1</span><button class="check" onclick="toggleTask(this,0,1)"></button>
+</div>
+    <div class="task"><span>🍽️ Unload dishwasher ⭐3</span><button class="check" onclick="toggleTask(this,0,1)"></button>
+</div>
   </div>
 
   <div class="stats" id="stats0"></div>
@@ -237,38 +244,45 @@ if ("serviceWorker" in navigator) {
 
   <div class="task">
     <span>👕 Get dressed ⭐1</span>
-    <button onclick="addStar(1,1)">✓</button>
+    <button class="check" onclick="toggleTask(this,1,1)"></button>
   </div>
 
   <div class="task">
     <span>🛏️ Make bed ⭐1</span>
-    <button onclick="addStar(1,1)">✓</button>
+    <button class="check" onclick="toggleTask(this,1,1)"></button>
   </div>
 
   <div class="task">
     <span>🧼 Wash face & moisturise ⭐1</span>
-    <button onclick="addStar(1,1)">✓</button>
+    <button class="check" onclick="toggleTask(this,1,1)"></button>
   </div>
 
   <div class="task">
     <span>🎒 Pack school bag ⭐1</span>
-    <button onclick="addStar(1,1)">✓</button>
+    <button class="check" onclick="toggleTask(this,1,1)"></button>
   </div>
 </div>
 
   <div class="section">
     <div class="section-title afternoon">Afternoon</div>
-    <div class="task"><span>🎒 Unpack school bag ⭐2</span><button onclick="addStar(1,2)">✓</button></div>
-    <div class="task"><span>📚 Homework ⭐2</span><button onclick="addStar(1,2)">✓</button></div>
-    <div class="task"><span>🍽️ Set table ⭐2</span><button onclick="addStar(1,2)">✓</button></div>
-    <div class="task"><span>📖 10 min reading ⭐3</span><button onclick="addStar(1,3)">✓</button></div>
+    <div class="task"><span>🎒 Unpack school bag ⭐2</span><button class="check" onclick="toggleTask(this,1,1)"></button>
+</div>
+    <div class="task"><span>📚 Homework ⭐2</span><button class="check" onclick="toggleTask(this,1,1)"></button>
+</div>
+    <div class="task"><span>🍽️ Set table ⭐2</span><button class="check" onclick="toggleTask(this,1,1)"></button>
+</div>
+    <div class="task"><span>📖 10 min reading ⭐3</span><button class="check" onclick="toggleTask(this,1,1)"></button>
+</div>
   </div>
 
   <div class="section">
     <div class="section-title evening">Evening</div>
-    <div class="task"><span>🍽️ Clean table ⭐1</span><button onclick="addStar(1,1)">✓</button></div>
-    <div class="task"><span>🚿 Shower & brush teeth ⭐1</span><button onclick="addStar(1,1)">✓</button></div>
-    <div class="task"><span>🧺 Put laundry away ⭐3</span><button onclick="addStar(1,3)">✓</button></div>
+    <div class="task"><span>🍽️ Clean table ⭐1</span><button class="check" onclick="toggleTask(this,1,1)"></button>
+</div>
+    <div class="task"><span>🚿 Shower & brush teeth ⭐1</span><button class="check" onclick="toggleTask(this,1,1)"></button>
+</div>
+    <div class="task"><span>🧺 Put laundry away ⭐3</span><button class="check" onclick="toggleTask(this,1,1)"></button>
+</div>
   </div>
 
   <div class="stats" id="stats1"></div>
@@ -368,6 +382,13 @@ function render(){
 autoReset();
 render();
 </script>
+<script>
+function toggleTask(btn, childIndex, stars){
+  if(btn.classList.contains("done")) return; // already checked
 
+  btn.classList.add("done");
+  addStar(childIndex, stars);
+}
+</script>
 </body>
 </html>
