@@ -430,12 +430,19 @@ function autoReset(){
   }
 }
 
-function addStar(i,val){
+function addStar(i, val){
   autoReset();
-  data.kids[i].daily+=val;
-  data.kids[i].total+=val;
+
+  data.kids[i].daily += val;
+  data.kids[i].total += val;
+
+  // SAFETY CLAMPS (very important)
+  if (data.kids[i].daily < 0) data.kids[i].daily = 0;
+  if (data.kids[i].total < 0) data.kids[i].total = 0;
+
   save();
-  if(data.kids[i].daily>=DAILY_GOAL) win(i);
+
+  if (data.kids[i].daily >= DAILY_GOAL) win(i);
 }
 
 function redeem(i,cost,weekendOnly){
@@ -462,75 +469,31 @@ function win(i){
   setTimeout(()=>w.style.display="none",4000);
 }
 
-function toggleTask(btn, childIndex, stars){
+function toggleTask(btn, childIndex, stars) {
   const id = btn.dataset.id;
   let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
 
-  // IF ALREADY CHECKED → parent uncheck
-  if(checked[id]){
-    const pin = prompt("Parent PIN required to uncheck");
+  // UNCHECK (parent only)
+  if (btn.classList.contains("checked")) {
+    const pin = prompt("Parent PIN required");
+    if (pin !== "9747") return;
 
-    if(pin !== PARENT_PIN){
-      alert("Incorrect PIN");
-      return;
-    }
-
-    // UNCHECK
     btn.classList.remove("checked");
-    delete checked[id];
+    checked[id] = false;
     localStorage.setItem("checkedTasks", JSON.stringify(checked));
+
+    addStar(childIndex, -stars); // REMOVE stars
     return;
   }
 
-  // NORMAL CHECK
+  // CHECK
   btn.classList.add("checked");
   checked[id] = true;
   localStorage.setItem("checkedTasks", JSON.stringify(checked));
+
   addStar(childIndex, stars);
 }
 
-function save(){
-  localStorage.setItem("kidsData",JSON.stringify(data));
-  render();
-}
-
-function render(){
-  data.kids.forEach((k,i)=>{
-    document.getElementById("stats"+i).innerHTML=
-      `⭐ Today: ${k.daily}<br>⭐ Total: ${k.total}`;
-    document.querySelectorAll(".progress span")[i]
-      .style.width=Math.min(k.daily/DAILY_GOAL*100,100)+"%";
-    document.getElementById("race"+i)
-      .style.width=Math.min(k.daily/DAILY_GOAL*100,100)+"%";
-  });
-}
-
-function toggleTask(btn, childIndex, stars){
-  const id = btn.dataset.id;
-  let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
-
-  // IF already checked → require PIN
-  if(btn.classList.contains("checked")){
-    const pin = prompt("Parent PIN required to uncheck:");
-
-    if(pin !== PARENT_PIN){
-      alert("Incorrect PIN");
-      return;
-    }
-
-    // UNCHECK
-    btn.classList.remove("checked");
-    delete checked[id];
-    localStorage.setItem("checkedTasks", JSON.stringify(checked));
-    return;
-  }
-
-  // NORMAL CHECK
-  btn.classList.add("checked");
-  checked[id] = true;
-  localStorage.setItem("checkedTasks", JSON.stringify(checked));
-  addStar(childIndex, stars);
-}
 
 autoReset();
 render();
