@@ -180,6 +180,7 @@ h1{text-align:center;margin-bottom:16px}
 </head>
   
 <script>
+const PARENT_PIN = "9747"; // 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/rewards-app/service-worker.js")
@@ -462,17 +463,29 @@ function win(i){
 
 function toggleTask(btn, childIndex, stars){
   const id = btn.dataset.id;
-
-  // already checked
-  if(btn.classList.contains("done")) return;
-
-  btn.classList.add("done");
-  addStar(childIndex, stars);
-
-  // save checked state
   let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+
+  // IF already checked → require PIN to uncheck
+  if(btn.classList.contains("done")){
+    const pin = prompt("Parent PIN required to uncheck:");
+
+    if(pin !== PARENT_PIN){
+      alert("Incorrect PIN");
+      return;
+    }
+
+    // UNCHECK
+    btn.classList.remove("done");
+    delete checked[id];
+    localStorage.setItem("checkedTasks", JSON.stringify(checked));
+    return;
+  }
+
+  // NORMAL CHECK (child)
+  btn.classList.add("done");
   checked[id] = true;
   localStorage.setItem("checkedTasks", JSON.stringify(checked));
+  addStar(childIndex, stars);
 }
 
 function save(){
@@ -495,8 +508,7 @@ function restoreChecks(){
   const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
 
   document.querySelectorAll(".check").forEach(btn => {
-    const id = btn.dataset.id;
-    if(checked[id]) {
+    if(checked[btn.dataset.id]){
       btn.classList.add("done");
     }
   });
