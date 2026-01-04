@@ -465,8 +465,8 @@ function toggleTask(btn, childIndex, stars){
   const id = btn.dataset.id;
   let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
 
-  // IF already checked → require PIN to uncheck
-  if(btn.classList.contains("done")){
+  // IF already checked → require PIN
+  if(btn.classList.contains("checked")){
     const pin = prompt("Parent PIN required to uncheck:");
 
     if(pin !== PARENT_PIN){
@@ -475,14 +475,14 @@ function toggleTask(btn, childIndex, stars){
     }
 
     // UNCHECK
-    btn.classList.remove("done");
+    btn.classList.remove("checked");
     delete checked[id];
     localStorage.setItem("checkedTasks", JSON.stringify(checked));
     return;
   }
 
-  // NORMAL CHECK (child)
-  btn.classList.add("done");
+  // NORMAL CHECK
+  btn.classList.add("checked");
   checked[id] = true;
   localStorage.setItem("checkedTasks", JSON.stringify(checked));
   addStar(childIndex, stars);
@@ -504,14 +504,31 @@ function render(){
   });
 }
 
-function restoreChecks(){
-  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+function toggleTask(btn, childIndex, stars){
+  const id = btn.dataset.id;
+  let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
 
-  document.querySelectorAll(".check").forEach(btn => {
-    if(checked[btn.dataset.id]){
-      btn.classList.add("done");
+  // IF already checked → require PIN
+  if(btn.classList.contains("checked")){
+    const pin = prompt("Parent PIN required to uncheck:");
+
+    if(pin !== PARENT_PIN){
+      alert("Incorrect PIN");
+      return;
     }
-  });
+
+    // UNCHECK
+    btn.classList.remove("checked");
+    delete checked[id];
+    localStorage.setItem("checkedTasks", JSON.stringify(checked));
+    return;
+  }
+
+  // NORMAL CHECK
+  btn.classList.add("checked");
+  checked[id] = true;
+  localStorage.setItem("checkedTasks", JSON.stringify(checked));
+  addStar(childIndex, stars);
 }
 
 autoReset();
