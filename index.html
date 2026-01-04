@@ -204,6 +204,10 @@ h1{text-align:center;margin-bottom:16px}
     <div class="reward" onclick="redeem(0,40,true)">🎬 Movie Night – ⭐40</div>
     <div class="reward" onclick="redeem(0,40,true)">🎲 Board Game Night – ⭐40</div>
   </div>
+  <div class="reset">
+  <button onclick="resetChild(0)">🔒 Parent Reset</button>
+</div>
+
 </div>
 
 <!-- LACHLAN -->
@@ -243,6 +247,9 @@ h1{text-align:center;margin-bottom:16px}
     <div class="reward" onclick="redeem(1,40,true)">🎬 Movie Night – ⭐40</div>
     <div class="reward" onclick="redeem(1,40,true)">🎲 Board Game Night – ⭐40</div>
   </div>
+  <div class="reset">
+  <button onclick="resetChild(1)">🔒 Parent Reset</button>
+</div>
 </div>
 
 </div>
@@ -320,6 +327,20 @@ function render(){
     document.getElementById("race"+i).style.width =
       Math.min(k.daily/DAILY_GOAL*100,100)+"%";
   });
+}
+  
+function resetChild(i){
+  if(prompt("Enter parent PIN") !== PIN) return;
+
+  data.kids[i].daily = 0;
+  data.kids[i].total = 0;
+
+  // Clear checkmarks for this child
+  document.querySelectorAll(".card")[i]
+    .querySelectorAll(".check")
+    .forEach(btn => btn.classList.remove("checked"));
+
+  save();
 }
 
 autoReset();
