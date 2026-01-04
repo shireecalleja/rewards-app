@@ -400,6 +400,7 @@ if ("serviceWorker" in navigator) {
 <div id="winner"></div>
 
 <script>
+const PARENT_PIN = "9747"; //
 const PIN="9747";
 const DAILY_GOAL=15;
 
@@ -465,9 +466,9 @@ function toggleTask(btn, childIndex, stars){
   const id = btn.dataset.id;
   let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
 
-  // IF already checked → require PIN
-  if(btn.classList.contains("checked")){
-    const pin = prompt("Parent PIN required to uncheck:");
+  // IF ALREADY CHECKED → parent uncheck
+  if(checked[id]){
+    const pin = prompt("Parent PIN required to uncheck");
 
     if(pin !== PARENT_PIN){
       alert("Incorrect PIN");
