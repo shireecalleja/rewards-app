@@ -296,6 +296,304 @@ function saveChecked(id, value){
   localStorage.setItem("checkedTasks", JSON.stringify(checked));
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Adam & Lachlan Rewards Chart</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  font-family:Arial, sans-serif;
+  background:#f2f7ff;
+  margin:0;
+  padding:16px;
+}
+
+h1{text-align:center;margin-bottom:16px}
+
+.race{
+  background:white;
+  border-radius:18px;
+  padding:14px;
+  margin-bottom:20px;
+  box-shadow:0 6px 18px rgba(0,0,0,.1);
+}
+.track{
+  background:#ddd;
+  height:20px;
+  border-radius:12px;
+  overflow:hidden;
+  margin:6px 0 12px;
+}
+.runner{
+  height:100%;
+  width:0%;
+  transition:width .4s ease;
+}
+.blue{background:#4da3ff}
+.green{background:#5ecf8e}
+
+.container{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:24px;
+  max-width:none;
+  width:100%;
+  margin:0;
+}
+
+  @media (max-width: 900px){
+  .container{
+    grid-template-columns:1fr;
+  }
+}
+
+.card{
+  background:white;
+  border-radius:20px;
+  padding:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,.12);
+}
+
+.avatar{text-align:center;font-size:44px}
+.name{text-align:center;font-weight:bold;font-size:22px;margin-bottom:6px}
+
+.progress{
+  background:#ddd;
+  height:14px;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:10px;
+}
+.progress span{
+  display:block;
+  height:100%;
+  width:0%;
+  transition:width .4s ease;
+}
+
+.section{margin-top:12px}
+.section-title{
+  text-align:center;
+  color:white;
+  font-weight:bold;
+  padding:6px;
+  border-radius:12px;
+}
+.morning{background:#ffb74d}
+.afternoon{background:#81c8f8}
+.evening{background:#9575cd}
+
+.task{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:6px 0;
+}
+
+.check{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  border:none;
+  background:#ffd54f;
+  cursor:pointer;
+  position:relative;
+}
+.check::after{
+  content:"✓";
+  color:white;
+  font-size:20px;
+  font-weight:bold;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-55%);
+  opacity:0;
+}
+.check.checked{
+  background:#4caf50;
+}
+.check.checked::after{opacity:1}
+
+.stats{
+  background:#eef6ff;
+  padding:10px;
+  border-radius:12px;
+  text-align:center;
+  margin-top:10px;
+  font-size:14px;
+}
+
+.rewards{
+  background:#fff1dc;
+  padding:10px;
+  border-radius:12px;
+  margin-top:12px;
+}
+.reward{
+  background:#ff8fa3;
+  color:white;
+  padding:8px;
+  border-radius:10px;
+  text-align:center;
+  margin-top:6px;
+  cursor:pointer;
+}
+
+#winner{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#000c;
+  color:white;
+  font-size:32px;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  z-index:10;
+}
+</style>
+</head>
+
+<body>
+
+<h1>⭐ Rewards Chart ⭐</h1>
+
+<div class="race">
+  <b>🏁 Star Race</b>
+  Adam
+  <div class="track"><div id="race0" class="runner blue"></div></div>
+  Lachlan
+  <div class="track"><div id="race1" class="runner green"></div></div>
+</div>
+
+<div class="container">
+
+<!-- ADAM -->
+<div class="card">
+  <div class="avatar">🚀</div>
+  <div class="name">Adam</div>
+  <div class="progress"><span class="blue"></span></div>
+
+  <div class="section">
+    <div class="section-title morning">Morning</div>
+    <div class="task"><span>👕 Get dressed ⭐1</span><button class="check" data-id="adam-morning-1" onclick="toggleTask(this,0,1)"></button> </div>
+    <div class="task"><span>🛏️ Make bed ⭐1</span><button class="check" data-id="adam-morning-2" onclick="toggleTask(this,0,1)"></button> </div>
+    <div class="task"><span>🧼 Wash face ⭐1</span><button class="check" data-id="adam-morning-3" onclick="toggleTask(this,0,1)"></button> </div>
+    <div class="task"><span>🎒 Pack school bag ⭐1</span><button class="check" data-id="adam-morning-4" onclick="toggleTask(this,0,1)"></button> </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title afternoon">Afternoon</div>
+    <div class="task"><span>🎒 Unpack bag ⭐2</span><button class="check" data-id="adam-afternoon-1" onclick="toggleTask(this,0,2)"></button> </div>
+    <div class="task"><span>📚 Homework ⭐2</span><button class="check" data-id="adam-afternoon-2" onclick="toggleTask(this,0,2)"></button> </div>
+    <div class="task"><span>🍽️ Set table ⭐2</span><button class="check" data-id="adam-afternoon-3" onclick="toggleTask(this,0,2)"></button> </div>
+    <div class="task"><span>📖 Reading ⭐3</span><button class="check" data-id="adam-afternoon-4" onclick="toggleTask(this,0,3)"></button> </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title evening">Evening</div>
+    <div class="task"><span>🍽️ Clean table ⭐1</span><button class="check" data-id="adam-evening-1" onclick="toggleTask(this,0,1)"></button> </div>
+    <div class="task"><span>🚿 Shower & teeth ⭐1</span><button class="check" data-id="adam-evening-2" onclick="toggleTask(this,0,1)"></button> </div>
+    <div class="task"><span>🍽️ Dishwasher ⭐3</span><button class="check" data-id="adam-evening-3" onclick="toggleTask(this,0,3)"></button> </div>
+  </div>
+
+  <div class="stats" id="stats0"></div>
+
+  <div class="rewards">
+    <div class="reward" onclick="redeem(0,5,false)">🍪 Treat – ⭐5</div>
+    <div class="reward" onclick="redeem(0,30,true)">📺 1 Hour YouTube – ⭐30</div>
+    <div class="reward" onclick="redeem(0,40,true)">🎬 Movie Night – ⭐40</div>
+    <div class="reward" onclick="redeem(0,40,true)">🎲 Board Game Night – ⭐40</div>
+  </div>
+  <div class="reset">
+  <button onclick="resetChild(0)">🔒 Parent Reset</button>
+</div>
+
+</div>
+
+<!-- LACHLAN -->
+<div class="card">
+  <div class="avatar">🐯</div>
+  <div class="name">Lachlan</div>
+  <div class="progress"><span class="green"></span></div>
+
+  <div class="section">
+    <div class="section-title morning">Morning</div>
+    <div class="task"><span>👕 Get dressed ⭐1</span><button class="check" data-id="lachlan-morning-1" onclick="toggleTask(this,1,1)"></button> </div>
+    <div class="task"><span>🛏️ Make bed ⭐1</span><button class="check" data-id="lachlan-morning-2" onclick="toggleTask(this,1,1)"></button> </div>
+    <div class="task"><span>🧼 Wash face ⭐1</span><button class="check" data-id="lachlan-morning-3" onclick="toggleTask(this,1,1)"></button> </div>
+    <div class="task"><span>🎒 Pack school bag ⭐1</span><button class="check" data-id="lachlan-morning-4" onclick="toggleTask(this,1,1)"></button> </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title afternoon">Afternoon</div>
+    <div class="task"><span>🎒 Unpack bag ⭐2</span><button class="check" data-id="lachlan-afternoon-1" onclick="toggleTask(this,1,2)"></button> </div>
+    <div class="task"><span>📚 Homework ⭐2</span><button class="check" data-id="lachlan-afternoon-2" onclick="toggleTask(this,1.2)"></button> </div>
+    <div class="task"><span>🍽️ Set table ⭐2</span><button class="check" data-id="lachlan-afternoon-3" onclick="toggleTask(this,1,2)"></button> </div>
+    <div class="task"><span>📖 Reading ⭐3</span><button class="check" data-id="lachlan-afternoon-4" onclick="toggleTask(this,1,3)"></button> </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title evening">Evening</div>
+    <div class="task"><span>🍽️ Clean table ⭐1</span><button class="check" data-id="lachlan-evening-1" onclick="toggleTask(this,1,1)"></button> </div>
+    <div class="task"><span>🚿 Shower & teeth ⭐1</span><button class="check" data-id="lachlan-evening-2" onclick="toggleTask(this,1,1)"></button> </div>
+    <div class="task"><span>🧺 Put laundry away ⭐3</span><button class="check" data-id="lachlan-evening-3" onclick="toggleTask(this,1,3)"></button> </div>
+  </div>
+
+  <div class="stats" id="stats1"></div>
+
+  <div class="rewards">
+    <div class="reward" onclick="redeem(1,5,false)">🍪 Treat – ⭐5</div>
+    <div class="reward" onclick="redeem(1,30,true)">📺 1 Hour YouTube – ⭐30</div>
+    <div class="reward" onclick="redeem(1,40,true)">🎬 Movie Night – ⭐40</div>
+    <div class="reward" onclick="redeem(1,40,true)">🎲 Board Game Night – ⭐40</div>
+  </div>
+  <div class="reset">
+  <button onclick="resetChild(1)">🔒 Parent Reset</button>
+</div>
+</div>
+
+</div>
+
+<div id="winner"></div>
+
+<script>
+const PIN="9747";
+const DAILY_GOAL=15;
+
+let data = JSON.parse(localStorage.getItem("kidsData")) || {
+  kids:[{daily:0,total:0},{daily:0,total:0}],
+  lastDay:"",
+  lastWeek:""
+};
+
+function today(){return new Date().toDateString();}
+function isWeekend(){const d=new Date().getDay();return d===5||d===6||d===0;}
+
+function autoReset(){
+  const now=today();
+  if(data.lastDay!==now){
+    data.kids.forEach(k=>k.daily=0);
+    data.lastDay=now;
+  }
+  const monday=new Date();
+  monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
+  if(data.lastWeek!==monday.toDateString()){
+    data.kids.forEach(k=>k.total=0);
+    data.lastWeek=monday.toDateString();
+  }
+}
+
+function saveChecked(id, value){
+  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+  checked[id] = value;
+  localStorage.setItem("checkedTasks", JSON.stringify(checked));
+}
+
 function toggleTask(btn, i, stars){
   const id = btn.dataset.id;
   if(!id) return;
@@ -306,6 +604,84 @@ function toggleTask(btn, i, stars){
   saveChecked(id, true);
   addStar(i, stars);
 }
+
+function addStar(i,val){
+  autoReset();
+  data.kids[i].daily+=val;
+  data.kids[i].total+=val;
+  save();
+  if(data.kids[i].daily>=DAILY_GOAL) win(i);
+}
+
+function redeem(i,cost,weekendOnly){
+  if(weekendOnly && !isWeekend()) return alert("Weekend only");
+  if(data.kids[i].total<cost) return alert("Not enough stars");
+  if(prompt("Enter parent PIN")===PIN){
+    data.kids[i].total-=cost;
+    save();
+  }
+}
+
+function win(i){
+  const w=document.getElementById("winner");
+  w.style.display="flex";
+  w.innerText=`🎉 ${i===0?"Adam":"Lachlan"} Wins Today! 🎉`;
+  setTimeout(()=>w.style.display="none",4000);
+}
+
+function save(){
+  localStorage.setItem("kidsData",JSON.stringify(data));
+  render();
+}
+
+function render(){
+  data.kids.forEach((k,i)=>{
+    document.getElementById("stats"+i).innerHTML =
+  `⭐ Today: ${k.daily}<br>⭐ This Week: ${k.total}`;
+    document.querySelectorAll(".progress span")[i].style.width =
+      Math.min(k.daily/DAILY_GOAL*100,100)+"%";
+    document.getElementById("race"+i).style.width =
+      Math.min(k.daily/DAILY_GOAL*100,100)+"%";
+  });
+}
+  
+function resetChild(i){
+  if(prompt("Enter parent PIN") !== PIN) return;
+
+  data.kids[i].daily = 0;
+  data.kids[i].total = 0;
+
+  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+
+  document.querySelectorAll(".card")[i]
+    .querySelectorAll(".check")
+    .forEach(btn=>{
+      btn.classList.remove("checked");
+      delete checked[btn.dataset.id];
+    });
+
+  localStorage.setItem("checkedTasks", JSON.stringify(checked));
+  save();
+}
+
+  function restoreChecks(){
+  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+  document.querySelectorAll(".check").forEach(btn=>{
+    const id = btn.dataset.id;
+    if(id && checked[id]){
+      btn.classList.add("checked");
+    }
+  });
+}
+
+autoReset();
+restoreChecks();
+render();
+
+</script>
+
+</body>
+</html>
 
 function addStar(i,val){
   autoReset();
