@@ -328,7 +328,7 @@ function save(){
 function render(){
   data.kids.forEach((k,i)=>{
     document.getElementById("stats"+i).innerHTML =
-      `⭐ Today: ${k.daily}<br>⭐ Total: ${k.total}`;
+  `⭐ Today: ${k.daily}<br>⭐ This Week: ${k.total}`;
     document.querySelectorAll(".progress span")[i].style.width =
       Math.min(k.daily/DAILY_GOAL*100,100)+"%";
     document.getElementById("race"+i).style.width =
