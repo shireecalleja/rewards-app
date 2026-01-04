@@ -460,17 +460,19 @@ function win(i){
   setTimeout(()=>w.style.display="none",4000);
 }
 
- function toggleTask(btn, childIndex, stars){
-  if(btn.classList.contains("checked")) return;
+function toggleTask(btn, childIndex, stars){
+  const id = btn.dataset.id;
 
-  btn.classList.add("checked");
+  // already checked
+  if(btn.classList.contains("done")) return;
+
+  btn.classList.add("done");
   addStar(childIndex, stars);
 
-  // save this specific task
-  localStorage.setItem(
-    "task-" + btn.dataset.id,
-    "checked"
-  );
+  // save checked state
+  let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+  checked[id] = true;
+  localStorage.setItem("checkedTasks", JSON.stringify(checked));
 }
 
 function save(){
@@ -489,9 +491,20 @@ function render(){
   });
 }
 
+function restoreChecks(){
+  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+
+  document.querySelectorAll(".check").forEach(btn => {
+    const id = btn.dataset.id;
+    if(checked[id]) {
+      btn.classList.add("done");
+    }
+  });
+}
+
 autoReset();
+restoreChecks();
 render();
-loadCheckedState();
 
   
 document.querySelectorAll(".check").forEach(btn => {
