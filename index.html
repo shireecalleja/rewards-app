@@ -224,16 +224,30 @@ h1{text-align:center;margin-bottom:16px}
   <div class="name">Lachlan</div>
   <div class="progress"><span class="green"></span></div>
 
+  <!-- MORNING -->
   <div class="section">
-    <div class="section-title morning">Morning</div>
-    <div class="task"><span>👕 Get dressed ⭐1</span><button class="check" onclick="toggleTask(this,1,1)"></button></div>
+     <div class="task"><span>👕 Get dressed ⭐1</span><button class="check" onclick="toggleTask(this,1,1)"></button></div>
     <div class="task"><span>🛏️ Make bed ⭐1</span><button class="check" onclick="toggleTask(this,1,1)"></button></div>
+    <div class="task"><span>🧼 Wash face ⭐1</span><button class="check" onclick="toggleTask(this,1,1)"></button></div>
+    <div class="task"><span>🎒 Pack school bag ⭐1</span><button class="check" onclick="toggleTask(this,1,1)"></button></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title afternoon">Afternoon</div>
+    <div class="task"><span>🎒 Unpack bag ⭐2</span><button class="check" onclick="toggleTask(this,1,2)"></button></div>
+    <div class="task"><span>📚 Homework ⭐2</span><button class="check" onclick="toggleTask(this,1,2)"></button></div>
+    <div class="task"><span>🍽️ Set table ⭐2</span><button class="check" onclick="toggleTask(this,1,2)"></button></div>
+    <div class="task"><span>📖 Reading ⭐3</span><button class="check" onclick="toggleTask(this,1,2)"></button></div>
   </div>
 
   <div class="section">
     <div class="section-title evening">Evening</div>
-    <div class="task"><span>🧺 Put laundry away ⭐3</span><button class="check" onclick="toggleTask(this,1,3)"></button></div>
+    <div class="task"><span>🍽️ Clean table ⭐1</span><button class="check" onclick="toggleTask(this,1,3)"></button></div>
+    <div class="task"><span>🚿 Shower & teeth ⭐1</span><button class="check" onclick="toggleTask(this,1,3)"></button></div>
+
+  <div class="task"><span>🧺Put laundry away ⭐3</span><button class="check" onclick="toggleTask(this,1,3)"></button></div>
   </div>
+</div>
 
   <div class="stats" id="stats1"></div>
 
@@ -303,7 +317,7 @@ function win(i){
   w.innerText=`🎉 ${i===0?"Adam":"Lachlan"} Wins Today! 🎉`;
   setTimeout(()=>w.style.display="none",4000);
 }
-
+  
 function save(){
   localStorage.setItem("kidsData",JSON.stringify(data));
   render();
@@ -317,11 +331,20 @@ function render(){
       Math.min(k.daily/DAILY_GOAL*100,100)+"%";
     document.getElementById("race"+i).style.width=
       Math.min(k.daily/DAILY_GOAL*100,100)+"%";
+}
+    function restoreChecks(){
+  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+
+  document.querySelectorAll(".check").forEach(btn => {
+    if(checked[btn.dataset.id]){
+      btn.classList.add("checked");
+    }
   });
 }
 
-autoReset();
+restoreChecks();
 render();
+
 </script>
 
 </body>
