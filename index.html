@@ -533,16 +533,20 @@ function toggleTask(btn, childIndex, stars){
 }
 
 autoReset();
-restoreChecks();
 render();
+restoreChecks();
 
-  
-document.querySelectorAll(".check").forEach(btn => {
-  const saved = localStorage.getItem("task-" + btn.dataset.id);
-  if (saved === "checked") {
-    btn.classList.add("checked");
-  }
-});
+
+function restoreChecks(){
+  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+
+  document.querySelectorAll(".check").forEach(btn => {
+    if(checked[btn.dataset.id]){
+      btn.classList.add("checked");
+    }
+  });
+}
+
 
 </script>
 <script>
