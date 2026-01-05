@@ -12,29 +12,8 @@ body{
   margin:0;
   padding:16px;
 }
-h1{text-align:center;margin-bottom:16px}
 
-.race{
-  background:white;
-  border-radius:18px;
-  padding:14px;
-  margin-bottom:20px;
-  box-shadow:0 6px 18px rgba(0,0,0,.1);
-}
-.track{
-  background:#ddd;
-  height:20px;
-  border-radius:12px;
-  overflow:hidden;
-  margin:6px 0 12px;
-}
-.runner{
-  height:100%;
-  width:0%;
-  transition:width .4s ease;
-}
-.blue{background:#4da3ff}
-.green{background:#5ecf8e}
+h1{text-align:center;margin-bottom:16px}
 
 .container{
   display:grid;
@@ -42,8 +21,9 @@ h1{text-align:center;margin-bottom:16px}
   gap:24px;
   width:100%;
 }
+
 @media (max-width:900px){
-  .container{grid-template-columns:1fr}
+  .container{grid-template-columns:1fr;}
 }
 
 .card{
@@ -67,8 +47,10 @@ h1{text-align:center;margin-bottom:16px}
   display:block;
   height:100%;
   width:0%;
-  transition:width .4s ease;
+  transition:width .3s ease;
 }
+.blue{background:#4da3ff}
+.green{background:#5ecf8e}
 
 .section{margin-top:12px}
 .section-title{
@@ -88,6 +70,7 @@ h1{text-align:center;margin-bottom:16px}
   align-items:center;
   padding:6px 0;
 }
+
 .check{
   width:30px;
   height:30px;
@@ -108,7 +91,9 @@ h1{text-align:center;margin-bottom:16px}
   transform:translate(-50%,-55%);
   opacity:0;
 }
-.check.checked{background:#4caf50}
+.check.checked{
+  background:#4caf50;
+}
 .check.checked::after{opacity:1}
 
 .stats{
@@ -137,26 +122,12 @@ h1{text-align:center;margin-bottom:16px}
 }
 
 .reset{text-align:center;margin-top:10px}
-.reset button{
-  padding:6px 12px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-}
 </style>
 </head>
 
 <body>
 
 <h1>⭐ Rewards Chart ⭐</h1>
-
-<div class="race">
-  <b>🏁 Star Race</b>
-  Adam
-  <div class="track"><div id="race0" class="runner blue"></div></div>
-  Lachlan
-  <div class="track"><div id="race1" class="runner green"></div></div>
-</div>
 
 <div class="container">
 
@@ -190,14 +161,6 @@ h1{text-align:center;margin-bottom:16px}
   </div>
 
   <div class="stats" id="stats0"></div>
-
-  <div class="rewards">
-    <div class="reward" onclick="redeem(0,5,false)">🍪 Treat – ⭐5</div>
-    <div class="reward" onclick="redeem(0,30,true)">📺 1 Hour YouTube – ⭐30</div>
-    <div class="reward" onclick="redeem(0,40,true)">🎬 Movie Night – ⭐40</div>
-    <div class="reward" onclick="redeem(0,40,true)">🎲 Board Game Night – ⭐40</div>
-  </div>
-
   <div class="reset"><button onclick="resetChild(0)">🔒 Parent Reset</button></div>
 </div>
 
@@ -231,118 +194,72 @@ h1{text-align:center;margin-bottom:16px}
   </div>
 
   <div class="stats" id="stats1"></div>
-
-  <div class="rewards">
-    <div class="reward" onclick="redeem(1,5,false)">🍪 Treat – ⭐5</div>
-    <div class="reward" onclick="redeem(1,30,true)">📺 1 Hour YouTube – ⭐30</div>
-    <div class="reward" onclick="redeem(1,40,true)">🎬 Movie Night – ⭐40</div>
-    <div class="reward" onclick="redeem(1,40,true)">🎲 Board Game Night – ⭐40</div>
-  </div>
-
   <div class="reset"><button onclick="resetChild(1)">🔒 Parent Reset</button></div>
 </div>
 
 </div>
 
 <script>
-const DAILY_GOAL=15;
+const PIN = "9747";
 
-let data=JSON.parse(localStorage.getItem("kidsData"))||{
+let data = JSON.parse(localStorage.getItem("kidsData")) || {
   kids:[{daily:0,total:0},{daily:0,total:0}]
 };
 
-function save(){
-  localStorage.setItem("kidsData", JSON.stringify(data));
-}
-
-const PIN = "9747"; // change to your real pin
-
-function toggleTask(btn, i, stars){
-  alert("toggleTask fired");
-
-
+function toggleTask(btn,i,stars){
+  const id = btn.dataset.id;
   let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
 
-  // 🔒 UNCHECK (parent only)
+  // 🔒 Parent uncheck
   if(btn.classList.contains("checked")){
     if(prompt("Enter parent PIN") !== PIN) return;
 
     btn.classList.remove("checked");
     delete checked[id];
-    localStorage.setItem("checkedTasks", JSON.stringify(checked));
-
-    data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
-    data.kids[i].total = Math.max(0, data.kids[i].total - stars);
-
-    save();
-    updateStats(i);
-    return;
+    data.kids[i].daily -= stars;
+    data.kids[i].total -= stars;
+  } else {
+    btn.classList.add("checked");
+    checked[id] = true;
+    data.kids[i].daily += stars;
+    data.kids[i].total += stars;
   }
 
-  // ✅ CHECK (child)
-  btn.classList.add("checked");
-  checked[id] = true;
   localStorage.setItem("checkedTasks", JSON.stringify(checked));
-
-  data.kids[i].daily += stars;
-  data.kids[i].total += stars;
-
-  save();
-  updateStats(i);
+  localStorage.setItem("kidsData", JSON.stringify(data));
+  render();
 }
 
-
-
-function addStar(i,val){
-  data.kids[i].daily+=val;
-  data.kids[i].total+=val;
+function resetChild(i){
+  if(prompt("Enter parent PIN") !== PIN) return;
+  data.kids[i] = {daily:0,total:0};
+  document.querySelectorAll(".card")[i].querySelectorAll(".check").forEach(b=>b.classList.remove("checked"));
+  localStorage.removeItem("checkedTasks");
   save();
-  render();
 }
 
 function render(){
   data.kids.forEach((k,i)=>{
-    document.getElementById("stats"+i).innerHTML=
-      `⭐ Today: ${k.daily}<br>⭐ Total: ${k.total}`;
-    document.querySelectorAll(".progress span")[i].style.width=
-      Math.min(100,(k.daily/DAILY_GOAL)*100)+"%";
-    document.getElementById("race"+i).style.width=
-      Math.min(100,(k.total/100)*100)+"%";
+    document.getElementById("stats"+i).innerHTML = `⭐ Today: ${k.daily}<br>⭐ Total: ${k.total}`;
+    document.querySelectorAll(".progress span")[i].style.width = Math.min(k.daily/15*100,100)+"%";
   });
 }
 
-function redeem(i,cost,reset){
-  if(data.kids[i].total<cost) return alert("Not enough stars");
-  data.kids[i].total-=cost;
-  if(reset) data.kids[i].daily=0;
-  save(); render();
-}
-
-function resetChild(i){
-  if(prompt("Enter parent PIN")!=="9747") return;
-  data.kids[i]={daily:0,total:0};
-  save();
-  localStorage.removeItem("checkedTasks");
-  document.querySelectorAll(".check").forEach(b=>b.classList.remove("checked"));
+function save(){
+  localStorage.setItem("kidsData", JSON.stringify(data));
   render();
-}
-
-function saveCheck(id,val){
-  const c=JSON.parse(localStorage.getItem("checkedTasks"))||{};
-  c[id]=val;
-  localStorage.setItem("checkedTasks",JSON.stringify(c));
 }
 
 function restoreChecks(){
   const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
   document.querySelectorAll(".check").forEach(btn=>{
-    if(checked[btn.dataset.id]){
-      btn.classList.add("checked");
-    }
+    if(checked[btn.dataset.id]) btn.classList.add("checked");
   });
 }
 
-autoReset();
 restoreChecks();
 render();
+</script>
 
+</body>
+</html>
