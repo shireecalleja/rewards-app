@@ -2,158 +2,46 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Adam & Lachlan Rewards Chart</title>
+<title>Rewards Chart</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{
-  font-family:Arial, sans-serif;
-  background:#f2f7ff;
-  margin:0;
-  padding:16px;
-}
+body{font-family:Arial;background:#f2f7ff;margin:0;padding:16px}
+h1{text-align:center}
+.container{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+@media(max-width:900px){.container{grid-template-columns:1fr}}
 
-h1{text-align:center;margin-bottom:16px}
+.card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 10px 25px rgba(0,0,0,.12)}
+.avatar{text-align:center;font-size:40px}
+.name{text-align:center;font-size:22px;font-weight:bold}
 
-.container{
-  display:grid;
-  grid-template-columns:repeat(2, 1fr);
-  gap:24px;
-  width:100%;
-}
+.progress{background:#ddd;height:14px;border-radius:10px;overflow:hidden;margin:10px 0}
+.progress span{display:block;height:100%;width:0%;transition:.3s}
 
-@media (max-width:900px){
-  .container{grid-template-columns:1fr;}
-}
-
-.card{
-  background:white;
-  border-radius:20px;
-  padding:16px;
-  box-shadow:0 10px 25px rgba(0,0,0,.12);
-}
-
-.avatar{text-align:center;font-size:44px}
-.name{text-align:center;font-weight:bold;font-size:22px;margin-bottom:6px}
-
-.progress{
-  background:#ddd;
-  height:14px;
-  border-radius:10px;
-  overflow:hidden;
-  margin-bottom:10px;
-}
-.progress span{
-  display:block;
-  height:100%;
-  width:0%;
-  transition:width .3s ease;
-}
 .blue{background:#4da3ff}
 .green{background:#5ecf8e}
 
-.section{margin-top:12px}
-.section-title{
-  text-align:center;
-  color:white;
-  font-weight:bold;
-  padding:6px;
-  border-radius:12px;
-}
+.section-title{text-align:center;color:#fff;font-weight:bold;padding:6px;border-radius:12px;margin-top:10px}
 .morning{background:#ffb74d}
 .afternoon{background:#81c8f8}
 .evening{background:#9575cd}
 
-.task{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:6px 0;
-}
-
-.check{
-  width:30px;
-  height:30px;
-  border-radius:50%;
-  border:none;
-  background:#ffd54f;
-  cursor:pointer;
-  position:relative;
-}
-.check::after{
-  content:"✓";
-  color:white;
-  font-size:20px;
-  font-weight:bold;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-55%);
-  opacity:0;
-}
-.check.checked{
-  background:#4caf50;
-}
+.task{display:flex;justify-content:space-between;align-items:center;padding:6px 0}
+.check{width:30px;height:30px;border-radius:50%;border:none;background:#ffd54f;cursor:pointer;position:relative}
+.check::after{content:"✓";color:#fff;font-size:20px;position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);opacity:0}
+.check.checked{background:#4caf50}
 .check.checked::after{opacity:1}
 
-.stats{
-  background:#eef6ff;
-  padding:10px;
-  border-radius:12px;
-  text-align:center;
-  margin-top:10px;
-  font-size:14px;
-}
+.stats{background:#eef6ff;padding:10px;border-radius:12px;text-align:center;margin-top:10px}
 
-.rewards{
-  background:#fff1dc;
-  padding:10px;
-  border-radius:12px;
-  margin-top:12px;
-}
-.reward{
-  background:#ff8fa3;
-  color:white;
-  padding:8px;
-  border-radius:10px;
-  text-align:center;
-  margin-top:6px;
-  cursor:pointer;
-}
+.rewards{background:#fff1dc;padding:10px;border-radius:12px;margin-top:12px}
+.reward{background:#ff8fa3;color:#fff;padding:8px;border-radius:10px;margin-top:6px;text-align:center;cursor:pointer}
 
 .reset{text-align:center;margin-top:10px}
 
- /* ===== STAR RACE ===== */
-.race{
-  background:#ffffff;
-  border-radius:18px;
-  padding:14px;
-  margin-bottom:20px;
-  box-shadow:0 6px 18px rgba(0,0,0,.1);
-}
-
-.track{
-  background:#ddd;
-  height:20px;
-  border-radius:12px;
-  overflow:hidden;
-  margin:6px 0 12px;
-}
-
-.runner{
-  height:100%;
-  width:0%;
-  transition:width .4s ease;
-}
-
-.blue{
-  background:#4da3ff;
-}
-
-.green{
-  background:#5ecf8e;
-}
- 
+.race{background:#fff;border-radius:18px;padding:14px;margin-bottom:20px;box-shadow:0 6px 18px rgba(0,0,0,.1)}
+.track{background:#ddd;height:20px;border-radius:12px;overflow:hidden;margin:6px 0}
+.runner{height:100%;width:0%;transition:.4s}
 </style>
 </head>
 
@@ -161,18 +49,12 @@ h1{text-align:center;margin-bottom:16px}
 
 <h1>⭐ Rewards Chart ⭐</h1>
 
-  <div class="race">
-  <b>🏁 Star Race</b>
-    
-  Adam
-  <div class="track">
-    <div id="race0" class="runner blue"></div>
-  </div>
-    
-  Lachlan
-  <div class="track">
-    <div id="race1" class="runner green"></div>
-  </div>
+<div class="race">
+<b>🏁 Star Race</b>
+Adam
+<div class="track"><div id="race0" class="runner blue"></div></div>
+Lachlan
+<div class="track"><div id="race1" class="runner green"></div></div>
 </div>
 
 <div class="container">
@@ -256,178 +138,100 @@ h1{text-align:center;margin-bottom:16px}
   <div class="reward" onclick="redeem(1,40,true)">🎲 Board Game Night – ⭐40</div>
 </div>
 
-  
-  <div class="reset"><button onclick="resetChild(1)">🔒 Parent Reset</button></div>
+
+<div class="reset"><button onclick="resetChild(1)">🔒 Parent Reset</button></div>
 </div>
 
 </div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
-// 🔥 Firebase setup
 const firebaseConfig = {
-  databaseURL: "https://rewards-chart-9eee7-default-rtdb.firebaseio.com"
+  databaseURL: "https://rewards-app-12c6f-default-rtdb.firebaseio.com"
 };
-
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const dbRef = db.ref("rewardsChart");
+const db = firebase.database().ref("chart");
 
-// 🔐 Settings
-const PIN = "9747";
-const DAILY_GOAL = 18;
-const RACE_GOAL = 100;
+const PIN="9747", DAILY_GOAL=10;
 
-// 📦 App data
-let data = {
-  kids: [{ daily: 0, total: 0 }, { daily: 0, total: 0 }],
-  checked: {}
+let data={
+ kids:[{daily:0,weekly:0},{daily:0,weekly:0}],
+ checked:{},
+ lastDay:"",
+ lastWeek:""
 };
 
-// 🔄 Load + sync
-function loadData() {
-  dbRef.on("value", snap => {
-    if (snap.exists()) data = snap.val();
-    restoreChecks();
-    render();
-  });
+db.on("value",s=>{
+ if(s.exists()) data=s.val();
+ restoreChecks();
+ render();
+});
+
+function toggleTask(btn,i,stars){
+ const id=btn.dataset.id;
+ if(btn.classList.contains("checked")){
+   if(prompt("Parent PIN")!==PIN) return;
+   btn.classList.remove("checked");
+   delete data.checked[id];
+   data.kids[i].daily-=stars;
+   data.kids[i].weekly-=stars;
+ }else{
+   btn.classList.add("checked");
+   data.checked[id]=true;
+   data.kids[i].daily+=stars;
+   data.kids[i].weekly+=stars;
+ }
+ save();
 }
 
-// 💾 Save
-function savePartial(updates) {
-  dbRef.update(updates);
+function restoreChecks(){
+ document.querySelectorAll(".check").forEach(b=>{
+   b.classList.toggle("checked",!!data.checked[b.dataset.id]);
+ });
 }
 
-// ✅ Restore checks
-function restoreChecks() {
-  document.querySelectorAll(".check").forEach(btn => {
-    btn.classList.toggle(
-      "checked",
-      data.checked && data.checked[btn.dataset.id]
-    );
-  });
+function render(){
+ data.kids.forEach((k,i)=>{
+   document.getElementById("stats"+i).innerHTML=
+   `⭐ Today: ${k.daily}<br>⭐ This Week: ${k.weekly}`;
+   document.querySelectorAll(".progress span")[i].style.width=
+   Math.min(k.daily/DAILY_GOAL*100,100)+"%";
+   document.getElementById("race"+i).style.width=
+   Math.min(k.weekly/50*100,100)+"%";
+ });
 }
 
-// ☑️ Toggle task
-function toggleTask(btn, i, stars) {
-  const id = btn.dataset.id;
-  if (!data.checked) data.checked = {};
-
-  // 🔒 Parent uncheck
-  if (btn.classList.contains("checked")) {
-    if (prompt("Enter parent PIN") !== PIN) return;
-
-    btn.classList.remove("checked");
-    delete data.checked[id];
-
-    data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
-    data.kids[i].total = Math.max(0, data.kids[i].total - stars);
-
-    savePartial({
-      [`checked/${id}`]: null,
-      [`kids/${i}`]: data.kids[i]
-    });
-
-  } else {
-    // ✅ Child check
-    btn.classList.add("checked");
-    data.checked[id] = true;
-
-    data.kids[i].daily += stars;
-    data.kids[i].total += stars;
-
-    savePartial({
-      [`checked/${id}`]: true,
-      [`kids/${i}`]: data.kids[i]
-    });
-  }
+function resetChild(i){
+ if(prompt("Parent PIN")!==PIN) return;
+ Object.keys(data.checked).forEach(id=>{
+   if(id.startsWith(i===0?"a":"l")) delete data.checked[id];
+ });
+ data.kids[i]={daily:0,weekly:0};
+ save();
 }
 
-
-// 🔒 Parent reset
-function resetChild(i) {
-  if (prompt("Enter parent PIN") !== PIN) return;
-
-  // Reset stars
-  data.kids[i] = { daily: 0, total: 0 };
-
-  // Remove ONLY this child's checked tasks
-  const updates = {};
-  Object.keys(data.checked || {}).forEach(id => {
-    if (
-      (i === 0 && id.startsWith("a-")) ||
-      (i === 1 && id.startsWith("l-"))
-    ) {
-      updates[`checked/${id}`] = null;
-      delete data.checked[id];
-    }
-  });
-
-  updates[`kids/${i}`] = data.kids[i];
-
-  dbRef.update(updates);
+function redeem(i,cost){
+ if(data.kids[i].weekly<cost) return alert("Not enough stars");
+ if(prompt("Parent PIN")!==PIN) return;
+ data.kids[i].weekly-=cost;
+ save();
 }
 
+function save(){db.set(data)}
 
-// 🎨 Render UI
-function render() {
-  data.kids.forEach((k, i) => {
-    document.getElementById("stats" + i).innerHTML =
-      `⭐ Today: ${k.daily}<br>⭐ This Week: ${k.total}`;
-
-    const progress = document.querySelectorAll(".progress span")[i];
-    if (progress) {
-      progress.style.width =
-        Math.min((k.daily / DAILY_GOAL) * 100, 100) + "%";
-    }
-
-    const race = document.getElementById("race" + i);
-    if (race) {
-      race.style.width =
-        Math.min((k.total / RACE_GOAL) * 100, 100) + "%";
-    }
-  });
+function midnightReset(){
+ const d=new Date().toDateString();
+ if(data.lastDay!==d){
+   data.kids.forEach(k=>k.daily=0);
+   data.checked={};
+   data.lastDay=d;
+   save();
+ }
 }
-
-// 🌙 Daily reset
-function scheduleMidnightReset() {
-  const now = new Date();
-  const midnight = new Date();
-  midnight.setHours(24, 0, 0, 0);
-
-  setTimeout(() => {
-    data.kids.forEach(k => (k.daily = 0));
-    data.checked = {};
-    save();
-    scheduleMidnightReset();
-  }, midnight - now);
-}
-
-// 📅 Weekly reset (Monday 12am)
-function scheduleWeeklyReset() {
-  const now = new Date();
-  const day = now.getDay();
-  const daysUntilMonday = (8 - day) % 7 || 7;
-
-  const nextMonday = new Date(now);
-  nextMonday.setDate(now.getDate() + daysUntilMonday);
-  nextMonday.setHours(0, 0, 0, 0);
-
-  setTimeout(() => {
-    data.kids.forEach(k => (k.total = 0));
-    save();
-    scheduleWeeklyReset();
-  }, nextMonday - now);
-}
-
-// 🚀 Start app
-loadData();
-scheduleMidnightReset();
-scheduleWeeklyReset();
+setInterval(midnightReset,60000);
 </script>
-
 
 </body>
 </html>
