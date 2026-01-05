@@ -133,7 +133,13 @@ Lachlan
 
 <script>
 const firebaseConfig = {
-  databaseURL: "https://rewards-app-12c6f-default-rtdb.firebaseio.com"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "rewards-app-12c6f.firebaseapp.com",
+  databaseURL: "https://rewards-app-12c6f-default-rtdb.firebaseio.com",
+  projectId: "rewards-app-12c6f",
+  storageBucket: "rewards-app-12c6f.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 firebase.initializeApp(firebaseConfig);
 const dbRef = firebase.database().ref("chart");
