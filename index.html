@@ -302,11 +302,26 @@ function resetChild(i){
 }
 
 function render(){
-  data.kids.forEach((k,i)=>{
-    document.getElementById("stats"+i).innerHTML = `⭐ Today: ${k.daily}<br>⭐ Total: ${k.total}`;
-    document.querySelectorAll(".progress span")[i].style.width = Math.min(k.daily/15*100,100)+"%";
+  data.kids.forEach((k, i) => {
+
+    // ⭐ Tally
+    document.getElementById("stats" + i).innerHTML =
+      `⭐ Today: ${k.daily}<br>⭐ Total: ${k.total}`;
+
+    // 📊 Daily progress bar
+    const progress = document.querySelectorAll(".progress span")[i];
+    if(progress){
+      progress.style.width = Math.min((k.daily / DAILY_GOAL) * 100, 100) + "%";
+    }
+
+    // 🏁 RACE BAR (this was the missing link)
+    const race = document.getElementById("race" + i);
+    if(race){
+      race.style.width = Math.min((k.total / 100) * 100, 100) + "%";
+    }
   });
 }
+
 
 function save(){
   localStorage.setItem("kidsData", JSON.stringify(data));
