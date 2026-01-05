@@ -262,133 +262,149 @@ h1{text-align:center;margin-bottom:16px}
 
 </div>
 
-<script>
-const PIN = "9747";
-const DAILY_GOAL = 18;
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-let data = JSON.parse(localStorage.getItem("kidsData")) || {
-  kids:[
-    {daily:0, total:0},
-    {daily:0, total:0}
-  ]
+<script>
+// 🔥 Firebase setup
+const firebaseConfig = {
+  databaseURL: "https://rewards-chart-9eee7-default-rtdb.firebaseio.com"
 };
 
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const dbRef = db.ref("rewardsChart");
 
-function toggleTask(btn,i,stars){
+// 🔐 Settings
+const PIN = "9747";
+const DAILY_GOAL = 18;
+const RACE_GOAL = 100;
+
+// 📦 App data
+let data = {
+  kids: [{ daily: 0, total: 0 }, { daily: 0, total: 0 }],
+  checked: {}
+};
+
+// 🔄 Load + sync
+function loadData() {
+  dbRef.on("value", snap => {
+    if (snap.exists()) data = snap.val();
+    restoreChecks();
+    render();
+  });
+}
+
+// 💾 Save
+function save() {
+  dbRef.set(data);
+}
+
+// ✅ Restore checks
+function restoreChecks() {
+  document.querySelectorAll(".check").forEach(btn => {
+    btn.classList.toggle(
+      "checked",
+      data.checked && data.checked[btn.dataset.id]
+    );
+  });
+}
+
+// ☑️ Toggle task
+function toggleTask(btn, i, stars) {
   const id = btn.dataset.id;
-  let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+  if (!data.checked) data.checked = {};
 
-  // 🔒 Parent uncheck
-  if(btn.classList.contains("checked")){
-    if(prompt("Enter parent PIN") !== PIN) return;
+  if (btn.classList.contains("checked")) {
+    if (prompt("Enter parent PIN") !== PIN) return;
 
     btn.classList.remove("checked");
-    delete checked[id];
-    data.kids[i].daily -= stars;
-    data.kids[i].total -= stars;
+    delete data.checked[id];
+    data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
+    data.kids[i].total = Math.max(0, data.kids[i].total - stars);
   } else {
     btn.classList.add("checked");
-    checked[id] = true;
+    data.checked[id] = true;
     data.kids[i].daily += stars;
     data.kids[i].total += stars;
   }
 
-  localStorage.setItem("checkedTasks", JSON.stringify(checked));
-  localStorage.setItem("kidsData", JSON.stringify(data));
-  render();
-}
-
-function resetChild(i){
-  if(prompt("Enter parent PIN") !== PIN) return;
-  data.kids[i] = {daily:0,total:0};
-  document.querySelectorAll(".card")[i].querySelectorAll(".check").forEach(b=>b.classList.remove("checked"));
-  localStorage.removeItem("checkedTasks");
   save();
 }
 
-function render(){
+// 🔒 Parent reset
+function resetChild(i) {
+  if (prompt("Enter parent PIN") !== PIN) return;
+
+  data.kids[i] = { daily: 0, total: 0 };
+
+  Object.keys(data.checked).forEach(id => {
+    if ((i === 0 && id.startsWith("a-")) ||
+        (i === 1 && id.startsWith("l-"))) {
+      delete data.checked[id];
+    }
+  });
+
+  save();
+}
+
+// 🎨 Render UI
+function render() {
   data.kids.forEach((k, i) => {
-
-    // ⭐ Tally
     document.getElementById("stats" + i).innerHTML =
-  `⭐ Today: ${k.daily}<br>⭐ This Week: ${k.total}`;
+      `⭐ Today: ${k.daily}<br>⭐ This Week: ${k.total}`;
 
-
-    // 📊 Daily progress bar
     const progress = document.querySelectorAll(".progress span")[i];
-    if(progress){
-      progress.style.width = Math.min((k.daily / DAILY_GOAL) * 100, 100) + "%";
+    if (progress) {
+      progress.style.width =
+        Math.min((k.daily / DAILY_GOAL) * 100, 100) + "%";
     }
 
-    // 🏁 RACE BAR (this was the missing link)
     const race = document.getElementById("race" + i);
-    if(race){
-      race.style.width = Math.min((k.total / 100) * 100, 100) + "%";
+    if (race) {
+      race.style.width =
+        Math.min((k.total / RACE_GOAL) * 100, 100) + "%";
     }
   });
 }
 
-  function scheduleWeeklyReset(){
+// 🌙 Daily reset
+function scheduleMidnightReset() {
   const now = new Date();
-  const day = now.getDay(); // 0=Sun, 1=Mon
+  const midnight = new Date();
+  midnight.setHours(24, 0, 0, 0);
+
+  setTimeout(() => {
+    data.kids.forEach(k => (k.daily = 0));
+    data.checked = {};
+    save();
+    scheduleMidnightReset();
+  }, midnight - now);
+}
+
+// 📅 Weekly reset (Monday 12am)
+function scheduleWeeklyReset() {
+  const now = new Date();
+  const day = now.getDay();
   const daysUntilMonday = (8 - day) % 7 || 7;
 
   const nextMonday = new Date(now);
   nextMonday.setDate(now.getDate() + daysUntilMonday);
   nextMonday.setHours(0, 0, 0, 0);
 
-  const msUntilReset = nextMonday - now;
-
   setTimeout(() => {
-    data.kids.forEach(kid => {
-      kid.total = 0;   // 🔄 weekly reset
-    });
+    data.kids.forEach(k => (k.total = 0));
     save();
     scheduleWeeklyReset();
-  }, msUntilReset);
+  }, nextMonday - now);
 }
 
-
-function save(){
-  localStorage.setItem("kidsData", JSON.stringify(data));
-  render();
-}
-
-function scheduleMidnightReset(){
-  const now = new Date();
-  const midnight = new Date();
-  midnight.setHours(24, 0, 0, 0); // next midnight
-
-  const msUntilMidnight = midnight - now;
-
-  setTimeout(() => {
-    // Reset daily stars
-    data.kids.forEach(kid => kid.daily = 0);
-
-    // Clear all checked tasks
-    localStorage.removeItem("checkedTasks");
-
-    // Save + update UI
-    save();
-
-    // Schedule next midnight reset
-    scheduleMidnightReset();
-  }, msUntilMidnight);
-}
-  
-function restoreChecks(){
-  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
-  document.querySelectorAll(".check").forEach(btn=>{
-    if(checked[btn.dataset.id]) btn.classList.add("checked");
-  });
-}
-
-restoreChecks();
-render();
+// 🚀 Start app
+loadData();
 scheduleMidnightReset();
 scheduleWeeklyReset();
-  
 </script>
+
 
 </body>
 </html>
