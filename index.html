@@ -242,13 +242,16 @@ function render(){
 function resetChild(i){
   if(prompt("Enter parent PIN") !== PIN) return;
 
-  // Reset stars
+  // Reset scores
   data.kids[i].daily = 0;
-  data.kids[i].weekly = 0;
+  data.kids[i].total = 0;
 
-  // Remove only THIS child’s checks
-  Object.keys(data.checked).forEach(id=>{
-    if(id.startsWith(i === 0 ? "a-" : "l-")){
+  // Remove ONLY this child's checks
+  Object.keys(data.checked || {}).forEach(id=>{
+    if(
+      (i === 0 && id.startsWith("a-")) ||
+      (i === 1 && id.startsWith("l-"))
+    ){
       delete data.checked[id];
     }
   });
