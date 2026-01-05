@@ -5,6 +5,9 @@
 <title>Rewards Chart</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<div class="stats" id="stats0"></div>
+<div class="stats" id="stats1"></div>
+  
 <style>
 body{font-family:Arial;background:#f2f7ff;margin:0;padding:16px}
 h1{text-align:center}
@@ -156,11 +159,14 @@ const db = firebase.database().ref("chart");
 
 const PIN="9747", DAILY_GOAL=10;
 
-let data={
- kids:[{daily:0,weekly:0},{daily:0,weekly:0}],
- checked:{},
- lastDay:"",
- lastWeek:""
+let data = {
+  kids: [
+    { daily: 0, weekly: 0 },
+    { daily: 0, weekly: 0 }
+  ],
+  checked: {},        // ✅ stores checked task IDs
+  lastDailyReset: "",
+  lastWeeklyReset: ""
 };
 
 db.on("value",s=>{
@@ -169,47 +175,84 @@ db.on("value",s=>{
  render();
 });
 
-function toggleTask(btn,i,stars){
- const id=btn.dataset.id;
- if(btn.classList.contains("checked")){
-   if(prompt("Parent PIN")!==PIN) return;
-   btn.classList.remove("checked");
-   delete data.checked[id];
-   data.kids[i].daily-=stars;
-   data.kids[i].weekly-=stars;
- }else{
-   btn.classList.add("checked");
-   data.checked[id]=true;
-   data.kids[i].daily+=stars;
-   data.kids[i].weekly+=stars;
- }
- save();
+function toggleTask(btn, kidIndex, stars){
+  const id = btn.dataset.id;
+
+  if(!data.checked) data.checked = {};
+
+  // 🔒 UNCHECK (parent only)
+  if(btn.classList.contains("checked")){
+    if(prompt("Enter parent PIN") !== PIN) return;
+
+    btn.classList.remove("checked");
+    delete data.checked[id];
+
+    data.kids[kidIndex].daily =
+      Math.max(0, data.kids[kidIndex].daily - stars);
+    data.kids[kidIndex].weekly =
+      Math.max(0, data.kids[kidIndex].weekly - stars);
+  }
+  // ✅ CHECK
+  else{
+    btn.classList.add("checked");
+    data.checked[id] = true;
+
+    data.kids[kidIndex].daily += stars;
+    data.kids[kidIndex].weekly += stars;
+  }
+
+  save();
 }
+
 
 function restoreChecks(){
- document.querySelectorAll(".check").forEach(b=>{
-   b.classList.toggle("checked",!!data.checked[b.dataset.id]);
- });
+  document.querySelectorAll(".check").forEach(btn=>{
+    btn.classList.toggle(
+      "checked",
+      data.checked && data.checked[btn.dataset.id]
+    );
+  });
+}
+  
+function render(){
+  data.kids.forEach((kid, i) => {
+
+    // ⭐ Tallies
+    document.getElementById("stats"+i).innerHTML =
+      `⭐ Today: ${kid.daily}<br>⭐ This Week: ${kid.weekly}`;
+
+    // 📊 Daily bar (optional)
+    const bar = document.querySelectorAll(".progress span")[i];
+    if(bar){
+      bar.style.width = Math.min((kid.daily / 18) * 100, 100) + "%";
+    }
+
+    // 🏁 Race bar (weekly)
+    const race = document.getElementById("race"+i);
+    if(race){
+      race.style.width = Math.min((kid.weekly / 100) * 100, 100) + "%";
+    }
+  });
+
+  restoreChecks();
 }
 
-function render(){
- data.kids.forEach((k,i)=>{
-   document.getElementById("stats"+i).innerHTML=
-   `⭐ Today: ${k.daily}<br>⭐ This Week: ${k.weekly}`;
-   document.querySelectorAll(".progress span")[i].style.width=
-   Math.min(k.daily/DAILY_GOAL*100,100)+"%";
-   document.getElementById("race"+i).style.width=
-   Math.min(k.weekly/50*100,100)+"%";
- });
-}
 
 function resetChild(i){
- if(prompt("Parent PIN")!==PIN) return;
- Object.keys(data.checked).forEach(id=>{
-   if(id.startsWith(i===0?"a":"l")) delete data.checked[id];
- });
- data.kids[i]={daily:0,weekly:0};
- save();
+  if(prompt("Enter parent PIN") !== PIN) return;
+
+  // Reset stars
+  data.kids[i].daily = 0;
+  data.kids[i].weekly = 0;
+
+  // Remove only THIS child’s checks
+  Object.keys(data.checked).forEach(id=>{
+    if(id.startsWith(i === 0 ? "a-" : "l-")){
+      delete data.checked[id];
+    }
+  });
+
+  save();
 }
 
 function redeem(i,cost){
@@ -219,18 +262,45 @@ function redeem(i,cost){
  save();
 }
 
-function save(){db.set(data)}
-
-function midnightReset(){
- const d=new Date().toDateString();
- if(data.lastDay!==d){
-   data.kids.forEach(k=>k.daily=0);
-   data.checked={};
-   data.lastDay=d;
-   save();
- }
+function save(){
+  dbRef.set(data);
 }
-setInterval(midnightReset,60000);
+
+function loadData(){
+  dbRef.on("value", snap=>{
+    if(snap.exists()){
+      data = snap.val();
+    }
+    render();
+  });
+}
+
+loadData();
+  
+function autoResets(){
+  const now = new Date();
+  const today = now.toDateString();
+
+  // 🌙 DAILY
+  if(data.lastDailyReset !== today){
+    data.kids.forEach(k => k.daily = 0);
+    data.checked = {};
+    data.lastDailyReset = today;
+  }
+
+  // 📅 WEEKLY (Monday)
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay()+6)%7));
+  const weekKey = monday.toDateString();
+
+  if(data.lastWeeklyReset !== weekKey){
+    data.kids.forEach(k => k.weekly = 0);
+    data.lastWeeklyReset = weekKey;
+  }
+
+  save();
+}
+setTimeout(autoResets, 1000);
 </script>
 
 </body>
