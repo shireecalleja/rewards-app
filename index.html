@@ -5,7 +5,6 @@
 <title>Rewards Chart</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
 <style>
 body{font-family:Arial;background:#f2f7ff;margin:0;padding:16px}
 h1{text-align:center}
@@ -18,11 +17,9 @@ h1{text-align:center}
 
 .progress{background:#ddd;height:14px;border-radius:10px;overflow:hidden;margin:10px 0}
 .progress span{display:block;height:100%;width:0%;transition:.3s}
-
 .blue{background:#4da3ff}
 .green{background:#5ecf8e}
-  
- 
+
 .section-title{text-align:center;color:#fff;font-weight:bold;padding:6px;border-radius:12px;margin-top:10px}
 .morning{background:#ffb74d}
 .afternoon{background:#81c8f8}
@@ -63,83 +60,68 @@ Lachlan
 
 <!-- ADAM -->
 <div class="card">
-  <div class="avatar">🚀</div>
-  <div class="name">Adam</div>
-  <div class="progress"><span class="blue"></span></div>
+<div class="avatar">🚀</div>
+<div class="name">Adam</div>
+<div class="progress"><span class="blue"></span></div>
 
-  <div class="section">
-    <div class="section-title morning">Morning</div>
-    <div class="task"><span>👕 Get dressed ⭐1</span><button class="check" data-id="a-m-1" onclick="toggleTask(this,0,1)"></button></div>
-    <div class="task"><span>🛏️ Make bed ⭐1</span><button class="check" data-id="a-m-2" onclick="toggleTask(this,0,1)"></button></div>
-    <div class="task"><span>🧼 Wash face ⭐1</span><button class="check" data-id="a-m-3" onclick="toggleTask(this,0,1)"></button></div>
-    <div class="task"><span>🎒 Pack bag ⭐1</span><button class="check" data-id="a-m-4" onclick="toggleTask(this,0,1)"></button></div>
-  </div>
+<div class="section-title morning">Morning</div>
+<div class="task"><span>👕 Get dressed ⭐1</span><button class="check" data-id="a-m-1" onclick="toggleTask(this,0,1)"></button></div>
+<div class="task"><span>🛏️ Make bed ⭐1</span><button class="check" data-id="a-m-2" onclick="toggleTask(this,0,1)"></button></div>
+<div class="task"><span>🧼 Wash face ⭐1</span><button class="check" data-id="a-m-3" onclick="toggleTask(this,0,1)"></button></div>
+<div class="task"><span>🎒 Pack bag ⭐1</span><button class="check" data-id="a-m-4" onclick="toggleTask(this,0,1)"></button></div>
 
-  <div class="section">
-    <div class="section-title afternoon">Afternoon</div>
-    <div class="task"><span>🎒 Unpack bag ⭐2</span><button class="check" data-id="a-a-1" onclick="toggleTask(this,0,2)"></button></div>
-    <div class="task"><span>📚 Homework ⭐2</span><button class="check" data-id="a-a-2" onclick="toggleTask(this,0,2)"></button></div>
-    <div class="task"><span>🍽️ Set table ⭐2</span><button class="check" data-id="a-a-3" onclick="toggleTask(this,0,2)"></button></div>
-    <div class="task"><span>📖 Reading ⭐3</span><button class="check" data-id="a-a-4" onclick="toggleTask(this,0,3)"></button></div>
-  </div>
+<div class="section-title afternoon">Afternoon</div>
+<div class="task"><span>🎒 Unpack bag ⭐2</span><button class="check" data-id="a-a-1" onclick="toggleTask(this,0,2)"></button></div>
+<div class="task"><span>📚 Homework ⭐2</span><button class="check" data-id="a-a-2" onclick="toggleTask(this,0,2)"></button></div>
+<div class="task"><span>🍽️ Set table ⭐2</span><button class="check" data-id="a-a-3" onclick="toggleTask(this,0,2)"></button></div>
+<div class="task"><span>📖 Reading ⭐3</span><button class="check" data-id="a-a-4" onclick="toggleTask(this,0,3)"></button></div>
 
-  <div class="section">
-    <div class="section-title evening">Evening</div>
-    <div class="task"><span>🍽️ Clean table ⭐1</span><button class="check" data-id="a-e-1" onclick="toggleTask(this,0,1)"></button></div>
-    <div class="task"><span>🚿 Shower & teeth ⭐1</span><button class="check" data-id="a-e-2" onclick="toggleTask(this,0,1)"></button></div>
-    <div class="task"><span>🍽️ Dishwasher ⭐3</span><button class="check" data-id="a-e-3" onclick="toggleTask(this,0,3)"></button></div>
-  </div>
+<div class="section-title evening">Evening</div>
+<div class="task"><span>🍽️ Clean table ⭐1</span><button class="check" data-id="a-e-1" onclick="toggleTask(this,0,1)"></button></div>
+<div class="task"><span>🚿 Shower & teeth ⭐1</span><button class="check" data-id="a-e-2" onclick="toggleTask(this,0,1)"></button></div>
+<div class="task"><span>🍽️ Dishwasher ⭐3</span><button class="check" data-id="a-e-3" onclick="toggleTask(this,0,3)"></button></div>
 
-   <div class="stats" id="stats0"></div>
-  
-  <div class="rewards">
-  <div class="reward" onclick="redeem(0,5,false)">🍪 Treat – ⭐5</div>
-  <div class="reward" onclick="redeem(0,30,true)">📺 1 Hour YouTube – ⭐30</div>
-  <div class="reward" onclick="redeem(0,40,true)">🎬 Movie Night – ⭐40</div>
-  <div class="reward" onclick="redeem(0,40,true)">🎲 Board Game Night – ⭐40</div>
+<div class="stats" id="stats0"></div>
+
+<div class="rewards">
+<div class="reward" onclick="redeem(0,5)">🍪 Treat – ⭐5</div>
+<div class="reward" onclick="redeem(0,30)">📺 1 Hour YouTube – ⭐30</div>
+<div class="reward" onclick="redeem(0,40)">🎬 Movie Night – ⭐40</div>
 </div>
 
-   <div class="reset"><button onclick="resetChild(0)">🔒 Parent Reset</button></div>
+<div class="reset"><button onclick="resetChild(0)">🔒 Parent Reset</button></div>
 </div>
 
 <!-- LACHLAN -->
 <div class="card">
-  <div class="avatar">🐯</div>
-  <div class="name">Lachlan</div>
-  <div class="progress"><span class="green"></span></div>
+<div class="avatar">🐯</div>
+<div class="name">Lachlan</div>
+<div class="progress"><span class="green"></span></div>
 
-  <div class="section">
-    <div class="section-title morning">Morning</div>
-    <div class="task"><span>👕 Get dressed ⭐1</span><button class="check" data-id="l-m-1" onclick="toggleTask(this,1,1)"></button></div>
-    <div class="task"><span>🛏️ Make bed ⭐1</span><button class="check" data-id="l-m-2" onclick="toggleTask(this,1,1)"></button></div>
-    <div class="task"><span>🧼 Wash face ⭐1</span><button class="check" data-id="l-m-3" onclick="toggleTask(this,1,1)"></button></div>
-    <div class="task"><span>🎒 Pack bag ⭐1</span><button class="check" data-id="l-m-4" onclick="toggleTask(this,1,1)"></button></div>
-  </div>
+<div class="section-title morning">Morning</div>
+<div class="task"><span>👕 Get dressed ⭐1</span><button class="check" data-id="l-m-1" onclick="toggleTask(this,1,1)"></button></div>
+<div class="task"><span>🛏️ Make bed ⭐1</span><button class="check" data-id="l-m-2" onclick="toggleTask(this,1,1)"></button></div>
+<div class="task"><span>🧼 Wash face ⭐1</span><button class="check" data-id="l-m-3" onclick="toggleTask(this,1,1)"></button></div>
+<div class="task"><span>🎒 Pack bag ⭐1</span><button class="check" data-id="l-m-4" onclick="toggleTask(this,1,1)"></button></div>
 
-  <div class="section">
-    <div class="section-title afternoon">Afternoon</div>
-    <div class="task"><span>🎒 Unpack bag ⭐2</span><button class="check" data-id="l-a-1" onclick="toggleTask(this,1,2)"></button></div>
-    <div class="task"><span>📚 Homework ⭐2</span><button class="check" data-id="l-a-2" onclick="toggleTask(this,1,2)"></button></div>
-    <div class="task"><span>🍽️ Set table ⭐2</span><button class="check" data-id="l-a-3" onclick="toggleTask(this,1,2)"></button></div>
-    <div class="task"><span>📖 Reading ⭐3</span><button class="check" data-id="l-a-4" onclick="toggleTask(this,1,3)"></button></div>
-  </div>
+<div class="section-title afternoon">Afternoon</div>
+<div class="task"><span>🎒 Unpack bag ⭐2</span><button class="check" data-id="l-a-1" onclick="toggleTask(this,1,2)"></button></div>
+<div class="task"><span>📚 Homework ⭐2</span><button class="check" data-id="l-a-2" onclick="toggleTask(this,1,2)"></button></div>
+<div class="task"><span>🍽️ Set table ⭐2</span><button class="check" data-id="l-a-3" onclick="toggleTask(this,1,2)"></button></div>
+<div class="task"><span>📖 Reading ⭐3</span><button class="check" data-id="l-a-4" onclick="toggleTask(this,1,3)"></button></div>
 
-  <div class="section">
-    <div class="section-title evening">Evening</div>
-    <div class="task"><span>🍽️ Clean table ⭐1</span><button class="check" data-id="l-e-1" onclick="toggleTask(this,1,1)"></button></div>
-    <div class="task"><span>🚿 Shower & teeth ⭐1</span><button class="check" data-id="l-e-2" onclick="toggleTask(this,1,1)"></button></div>
-    <div class="task"><span>🧺 Put laundry away ⭐3</span><button class="check" data-id="l-e-3" onclick="toggleTask(this,1,3)"></button></div>
-  </div>
+<div class="section-title evening">Evening</div>
+<div class="task"><span>🍽️ Clean table ⭐1</span><button class="check" data-id="l-e-1" onclick="toggleTask(this,1,1)"></button></div>
+<div class="task"><span>🚿 Shower & teeth ⭐1</span><button class="check" data-id="l-e-2" onclick="toggleTask(this,1,1)"></button></div>
+<div class="task"><span>🧺 Put laundry away ⭐3</span><button class="check" data-id="l-e-3" onclick="toggleTask(this,1,3)"></button></div>
 
-  <div class="stats" id="stats1"></div>
-  
-  <div class="rewards">
-  <div class="reward" onclick="redeem(1,5,false)">🍪 Treat – ⭐5</div>
-  <div class="reward" onclick="redeem(1,30,true)">📺 1 Hour YouTube – ⭐30</div>
-  <div class="reward" onclick="redeem(1,40,true)">🎬 Movie Night – ⭐40</div>
-  <div class="reward" onclick="redeem(1,40,true)">🎲 Board Game Night – ⭐40</div>
+<div class="stats" id="stats1"></div>
+
+<div class="rewards">
+<div class="reward" onclick="redeem(1,5)">🍪 Treat – ⭐5</div>
+<div class="reward" onclick="redeem(1,30)">📺 1 Hour YouTube – ⭐30</div>
+<div class="reward" onclick="redeem(1,40)">🎬 Movie Night – ⭐40</div>
 </div>
-
 
 <div class="reset"><button onclick="resetChild(1)">🔒 Parent Reset</button></div>
 </div>
@@ -156,139 +138,97 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const dbRef = firebase.database().ref("chart");
 
-const PIN="9747", DAILY_GOAL=10;
+const PIN="9747";
 
 let data = {
-  kids: [
-    { daily: 0, weekly: 0 },
-    { daily: 0, weekly: 0 }
+  kids:[
+    {daily:0,weekly:0},
+    {daily:0,weekly:0}
   ],
-  checked: {},        // ✅ stores checked task IDs
-  lastDailyReset: "",
-  lastWeeklyReset: ""
+  checked:{},
+  lastDaily:"",
+  lastWeekly:""
 };
 
-function toggleTask(btn, i, stars){
-  const id = btn.dataset.id;
-  if(!id) return;
+dbRef.on("value",s=>{
+  if(s.exists()) data=s.val();
+  restoreChecks();
+  render();
+});
 
-  if(!data.checked) data.checked = {};
+function toggleTask(btn,i,stars){
+  const id=btn.dataset.id;
+  const checked=!!data.checked[id];
 
-  const isChecked = !!data.checked[id];
-
-  // 🔒 Parent PIN required to UNCHECK
-  if(isChecked){
-    if(prompt("Enter parent PIN") !== PIN) return;
-
+  if(checked){
+    if(prompt("Enter parent PIN")!==PIN) return;
     delete data.checked[id];
-    data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
-    data.kids[i].weekly = Math.max(0, data.kids[i].weekly - stars);
+    data.kids[i].daily=Math.max(0,data.kids[i].daily-stars);
+    data.kids[i].weekly=Math.max(0,data.kids[i].weekly-stars);
+  }else{
+    data.checked[id]=true;
+    data.kids[i].daily+=stars;
+    data.kids[i].weekly+=stars;
   }
-  else{
-    data.checked[id] = true;
-    data.kids[i].daily += stars;
-    data.kids[i].weekly += stars;
-  }
-
   save();
 }
 
-
-function restoreChecks(){
-  document.querySelectorAll(".check").forEach(btn=>{
-    btn.classList.toggle(
-      "checked",
-      data.checked && data.checked[btn.dataset.id]
-    );
-  });
-}
-  
-function render(){
-  data.kids.forEach((kid, i) => {
-
-    // ⭐ Tallies
-    document.getElementById("stats"+i).innerHTML =
-      `⭐ Today: ${kid.daily}<br>⭐ This Week: ${kid.weekly}`;
-
-    // 📊 Daily bar (optional)
-    const bar = document.querySelectorAll(".progress span")[i];
-    if(bar){
-      bar.style.width = Math.min((kid.daily / 18) * 100, 100) + "%";
-    }
-
-    // 🏁 Race bar (weekly)
-    const race = document.getElementById("race"+i);
-    if(race){
-      race.style.width = Math.min((kid.weekly / 100) * 100, 100) + "%";
-    }
-  });
-}
-
 function resetChild(i){
-  if(prompt("Enter parent PIN") !== PIN) return;
-
-  data.kids[i].daily = 0;
-  data.kids[i].weekly = 0;
-
-  if(data.checked){
-    Object.keys(data.checked).forEach(id=>{
-      if(
-        (i === 0 && id.startsWith("a-")) ||
-        (i === 1 && id.startsWith("l-"))
-      ){
-        delete data.checked[id];
-      }
-    });
-  }
-
+  if(prompt("Enter parent PIN")!==PIN) return;
+  data.kids[i].daily=0;
+  Object.keys(data.checked).forEach(id=>{
+    if((i===0&&id.startsWith("a-"))||(i===1&&id.startsWith("l-")))
+      delete data.checked[id];
+  });
   save();
 }
 
 function redeem(i,cost){
- if(data.kids[i].weekly<cost) return alert("Not enough stars");
- if(prompt("Parent PIN")!==PIN) return;
- data.kids[i].weekly-=cost;
- save();
+  if(data.kids[i].weekly<cost) return alert("Not enough stars");
+  if(prompt("Enter parent PIN")!==PIN) return;
+  data.kids[i].weekly-=cost;
+  save();
 }
 
-function save(){
-  dbRef.set(data);
-}
-
-function loadData(){
-  dbRef.on("value", snap=>{
-    if(snap.exists()){
-      data = snap.val();
-    }
-    restoreChecks();
-    render();
+function restoreChecks(){
+  document.querySelectorAll(".check").forEach(b=>{
+    b.classList.toggle("checked",data.checked[b.dataset.id]);
   });
 }
 
-loadData();
-  
-function autoResets(){
-  const now = new Date();
-  const today = now.toDateString();
+function render(){
+  data.kids.forEach((k,i)=>{
+    document.getElementById("stats"+i).innerHTML=
+      `⭐ Today: ${k.daily}<br>⭐ This Week: ${k.weekly}`;
+    document.querySelectorAll(".progress span")[i].style.width=
+      Math.min(k.daily/18*100,100)+"%";
+    document.getElementById("race"+i).style.width=
+      Math.min(k.weekly/100*100,100)+"%";
+  });
+}
 
-  // 🌙 DAILY
-  if(data.lastDailyReset !== today){
-    data.kids.forEach(k => k.daily = 0);
-    data.checked = {};
-    data.lastDailyReset = today;
+function autoReset(){
+  const now=new Date();
+  const today=now.toDateString();
+  if(data.lastDaily!==today){
+    data.kids.forEach(k=>k.daily=0);
+    data.checked={};
+    data.lastDaily=today;
   }
-
-  // 📅 WEEKLY (Monday)
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - ((now.getDay()+6)%7));
-  const weekKey = monday.toDateString();
-
-  if(data.lastWeeklyReset !== weekKey){
-    data.kids.forEach(k => k.weekly = 0);
-    data.lastWeeklyReset = weekKey;
+  const monday=new Date(now);
+  monday.setDate(now.getDate()-((now.getDay()+6)%7));
+  const wk=monday.toDateString();
+  if(data.lastWeekly!==wk){
+    data.kids.forEach(k=>k.weekly=0);
+    data.lastWeekly=wk;
   }
+  save();
+}
 
-save();
-restoreChecks();
-render();
+function save(){ dbRef.set(data); }
 
+setTimeout(autoReset,1000);
+</script>
+
+</body>
+</html>
