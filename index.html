@@ -251,7 +251,7 @@ let data=JSON.parse(localStorage.getItem("kidsData"))||{
   kids:[{daily:0,total:0},{daily:0,total:0}]
 };
 
-function save(){localStorage.setItem("kidsData",JSON.stringify(data));}
+function saveData(){localStorage.setItem("kidsData",JSON.stringify(data));}
 
 function toggleTask(btn, i, stars){
   const id = btn.dataset.id;
@@ -259,33 +259,34 @@ function toggleTask(btn, i, stars){
 
   let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
 
-  // 🔒 UNCHECK (parent only)
+  // 🔒 PARENT UNCHECK
   if(btn.classList.contains("checked")){
     if(prompt("Enter parent PIN to uncheck") !== PIN) return;
 
-    // remove from storage FIRST
+    // remove from storage
     delete checked[id];
     localStorage.setItem("checkedTasks", JSON.stringify(checked));
 
-    // remove UI state
+    // remove visual state
     btn.classList.remove("checked");
 
-    // remove stars safely
+    // remove stars
     data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
     data.kids[i].total = Math.max(0, data.kids[i].total - stars);
 
-    save(); // render + persist
+    // update UI WITHOUT restoreChecks
+    document.getElementById("stats"+i).innerHTML = statsHTML(i);
+    saveData();
+
     return;
   }
 
-  // ✅ NORMAL CHECK (kids)
+  // ✅ NORMAL CHECK
   btn.classList.add("checked");
   checked[id] = true;
   localStorage.setItem("checkedTasks", JSON.stringify(checked));
-
   addStar(i, stars);
 }
-
 
 
 function addStar(i,val){
