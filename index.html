@@ -258,8 +258,8 @@ function save(){
 const PIN = "9747"; // change to your real pin
 
 function toggleTask(btn, i, stars){
-  const id = btn.dataset.id;
-  if(!id) return;
+  alert("toggleTask fired");
+
 
   let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
 
