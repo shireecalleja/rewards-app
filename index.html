@@ -350,17 +350,26 @@ function toggleTask(btn, i, stars) {
 function resetChild(i) {
   if (prompt("Enter parent PIN") !== PIN) return;
 
+  // Reset stars
   data.kids[i] = { daily: 0, total: 0 };
 
-  Object.keys(data.checked).forEach(id => {
-    if ((i === 0 && id.startsWith("a-")) ||
-        (i === 1 && id.startsWith("l-"))) {
+  // Remove ONLY this child's checked tasks
+  const updates = {};
+  Object.keys(data.checked || {}).forEach(id => {
+    if (
+      (i === 0 && id.startsWith("a-")) ||
+      (i === 1 && id.startsWith("l-"))
+    ) {
+      updates[`checked/${id}`] = null;
       delete data.checked[id];
     }
   });
 
-  save();
+  updates[`kids/${i}`] = data.kids[i];
+
+  dbRef.update(updates);
 }
+
 
 // 🎨 Render UI
 function render() {
