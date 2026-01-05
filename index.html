@@ -259,24 +259,24 @@ function toggleTask(btn, i, stars){
 
   let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
 
-  // 🔒 PARENT UNCHECK
+  // 🔒 UNCHECK (PARENT)
   if(btn.classList.contains("checked")){
-    if(prompt("Enter parent PIN to uncheck") !== PIN) return;
+    if(prompt("Enter parent PIN") !== PIN) return;
 
-    // remove from storage
+    // 1️⃣ remove visual check
+    btn.classList.remove("checked");
+
+    // 2️⃣ remove from storage
     delete checked[id];
     localStorage.setItem("checkedTasks", JSON.stringify(checked));
 
-    // remove visual state
-    btn.classList.remove("checked");
-
-    // remove stars
+    // 3️⃣ remove stars
     data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
     data.kids[i].total = Math.max(0, data.kids[i].total - stars);
 
-    // update UI WITHOUT restoreChecks
-    document.getElementById("stats"+i).innerHTML = statsHTML(i);
-    saveData();
+    // 4️⃣ save + update UI
+    localStorage.setItem("kidsData", JSON.stringify(data));
+    render();
 
     return;
   }
@@ -287,6 +287,7 @@ function toggleTask(btn, i, stars){
   localStorage.setItem("checkedTasks", JSON.stringify(checked));
   addStar(i, stars);
 }
+
 
 
 function addStar(i,val){
@@ -330,15 +331,15 @@ function saveCheck(id,val){
 }
 
 function restoreChecks(){
-  const c=JSON.parse(localStorage.getItem("checkedTasks"))||{};
-  document.querySelectorAll(".check").forEach(b=>{
-    if(c[b.dataset.id]) b.classList.add("checked");
+  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+  document.querySelectorAll(".check").forEach(btn=>{
+    if(checked[btn.dataset.id]){
+      btn.classList.add("checked");
+    }
   });
 }
 
+autoReset();
 restoreChecks();
 render();
-</script>
 
-</body>
-</html>
