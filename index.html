@@ -253,12 +253,35 @@ let data=JSON.parse(localStorage.getItem("kidsData"))||{
 
 function save(){localStorage.setItem("kidsData",JSON.stringify(data));}
 
-function toggleTask(btn,i,val){
-  if(btn.classList.contains("checked")) return;
+function toggleTask(btn, i, stars){
+  const id = btn.dataset.id;
+  if(!id) return;
+
+  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+
+  // IF already checked → require parent PIN to uncheck
+  if(btn.classList.contains("checked")){
+    if(prompt("Enter parent PIN to uncheck") !== PIN) return;
+
+    btn.classList.remove("checked");
+    delete checked[id];
+
+    data.kids[i].daily -= stars;
+    data.kids[i].total -= stars;
+
+    localStorage.setItem("checkedTasks", JSON.stringify(checked));
+    save();
+    return;
+  }
+
+  // Normal checking (no PIN)
   btn.classList.add("checked");
-  saveCheck(btn.dataset.id,true);
-  addStar(i,val);
+  checked[id] = true;
+  localStorage.setItem("checkedTasks", JSON.stringify(checked));
+
+  addStar(i, stars);
 }
+
 
 function addStar(i,val){
   data.kids[i].daily+=val;
