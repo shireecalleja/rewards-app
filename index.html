@@ -257,7 +257,7 @@ function toggleTask(btn, i, stars){
   const id = btn.dataset.id;
   if(!id) return;
 
-  // IF already checked → parent PIN required to uncheck
+  // UNCHECK (parent protected)
   if(btn.classList.contains("checked")){
     if(prompt("Enter parent PIN") !== PIN) return;
 
@@ -270,7 +270,7 @@ function toggleTask(btn, i, stars){
     return;
   }
 
-  // Normal check
+  // CHECK
   btn.classList.add("checked");
   saveChecked(id, true);
   addStar(i, stars);
@@ -311,11 +311,18 @@ function resetChild(i){
   render();
 }
 
-function saveCheck(id,val){
-  const c=JSON.parse(localStorage.getItem("checkedTasks"))||{};
-  c[id]=val;
-  localStorage.setItem("checkedTasks",JSON.stringify(c));
+function saveChecked(id, value){
+  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+
+  if(value){
+    checked[id] = true;
+  } else {
+    delete checked[id];
+  }
+
+  localStorage.setItem("checkedTasks", JSON.stringify(checked));
 }
+
 
 function restoreChecks(){
   const c=JSON.parse(localStorage.getItem("checkedTasks"))||{};
