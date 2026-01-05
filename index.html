@@ -251,9 +251,11 @@ let data=JSON.parse(localStorage.getItem("kidsData"))||{
   kids:[{daily:0,total:0},{daily:0,total:0}]
 };
 
-function saveData(){localStorage.setItem("kidsData",JSON.stringify(data));}
+function save(){
+  localStorage.setItem("kidsData", JSON.stringify(data));
+}
 
-  const PIN = "1234"; // change to your real pin
+const PIN = "9747"; // change to your real pin
 
 function toggleTask(btn, i, stars){
   const id = btn.dataset.id;
@@ -271,8 +273,9 @@ function toggleTask(btn, i, stars){
 
     data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
     data.kids[i].total = Math.max(0, data.kids[i].total - stars);
-    save();          // ✅ save only
-    updateStats(i);  // ✅ update UI only
+
+    save();
+    updateStats(i);
     return;
   }
 
@@ -283,9 +286,11 @@ function toggleTask(btn, i, stars){
 
   data.kids[i].daily += stars;
   data.kids[i].total += stars;
+
   save();
   updateStats(i);
 }
+
 
 
 function addStar(i,val){
