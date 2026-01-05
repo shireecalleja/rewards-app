@@ -253,41 +253,39 @@ let data=JSON.parse(localStorage.getItem("kidsData"))||{
 
 function saveData(){localStorage.setItem("kidsData",JSON.stringify(data));}
 
+  const PIN = "1234"; // change to your real pin
+
 function toggleTask(btn, i, stars){
   const id = btn.dataset.id;
   if(!id) return;
 
   let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
 
-  // 🔒 UNCHECK (PARENT)
+  // 🔒 UNCHECK (parent only)
   if(btn.classList.contains("checked")){
     if(prompt("Enter parent PIN") !== PIN) return;
 
-    // 1️⃣ remove visual check
     btn.classList.remove("checked");
-
-    // 2️⃣ remove from storage
     delete checked[id];
     localStorage.setItem("checkedTasks", JSON.stringify(checked));
 
-    // 3️⃣ remove stars
     data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
     data.kids[i].total = Math.max(0, data.kids[i].total - stars);
-
-    // 4️⃣ save + update UI
-    localStorage.setItem("kidsData", JSON.stringify(data));
-    render();
-
+    save();          // ✅ save only
+    updateStats(i);  // ✅ update UI only
     return;
   }
 
-  // ✅ NORMAL CHECK
+  // ✅ CHECK (child)
   btn.classList.add("checked");
   checked[id] = true;
   localStorage.setItem("checkedTasks", JSON.stringify(checked));
-  addStar(i, stars);
-}
 
+  data.kids[i].daily += stars;
+  data.kids[i].total += stars;
+  save();
+  updateStats(i);
+}
 
 
 function addStar(i,val){
