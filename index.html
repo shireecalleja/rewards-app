@@ -267,8 +267,12 @@ const PIN = "9747";
 const DAILY_GOAL = 18;
 
 let data = JSON.parse(localStorage.getItem("kidsData")) || {
-  kids:[{daily:0,total:0},{daily:0,total:0}]
+  kids:[
+    {daily:0, total:0},
+    {daily:0, total:0}
+  ]
 };
+
 
 function toggleTask(btn,i,stars){
   const id = btn.dataset.id;
@@ -307,7 +311,8 @@ function render(){
 
     // ⭐ Tally
     document.getElementById("stats" + i).innerHTML =
-      `⭐ Today: ${k.daily}<br>⭐ Total: ${k.total}`;
+  `⭐ Today: ${k.daily}<br>⭐ This Week: ${k.total}`;
+
 
     // 📊 Daily progress bar
     const progress = document.querySelectorAll(".progress span")[i];
@@ -323,12 +328,54 @@ function render(){
   });
 }
 
+  function scheduleWeeklyReset(){
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun, 1=Mon
+  const daysUntilMonday = (8 - day) % 7 || 7;
+
+  const nextMonday = new Date(now);
+  nextMonday.setDate(now.getDate() + daysUntilMonday);
+  nextMonday.setHours(0, 0, 0, 0);
+
+  const msUntilReset = nextMonday - now;
+
+  setTimeout(() => {
+    data.kids.forEach(kid => {
+      kid.total = 0;   // 🔄 weekly reset
+    });
+    save();
+    scheduleWeeklyReset();
+  }, msUntilReset);
+}
+
 
 function save(){
   localStorage.setItem("kidsData", JSON.stringify(data));
   render();
 }
 
+function scheduleMidnightReset(){
+  const now = new Date();
+  const midnight = new Date();
+  midnight.setHours(24, 0, 0, 0); // next midnight
+
+  const msUntilMidnight = midnight - now;
+
+  setTimeout(() => {
+    // Reset daily stars
+    data.kids.forEach(kid => kid.daily = 0);
+
+    // Clear all checked tasks
+    localStorage.removeItem("checkedTasks");
+
+    // Save + update UI
+    save();
+
+    // Schedule next midnight reset
+    scheduleMidnightReset();
+  }, msUntilMidnight);
+}
+  
 function restoreChecks(){
   const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
   document.querySelectorAll(".check").forEach(btn=>{
@@ -338,6 +385,9 @@ function restoreChecks(){
 
 restoreChecks();
 render();
+scheduleMidnightReset();
+scheduleWeeklyReset();
+  
 </script>
 
 </body>
