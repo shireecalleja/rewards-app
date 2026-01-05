@@ -296,8 +296,8 @@ function loadData() {
 }
 
 // 💾 Save
-function save() {
-  dbRef.set(data);
+function savePartial(updates) {
+  dbRef.update(updates);
 }
 
 // ✅ Restore checks
@@ -315,22 +315,36 @@ function toggleTask(btn, i, stars) {
   const id = btn.dataset.id;
   if (!data.checked) data.checked = {};
 
+  // 🔒 Parent uncheck
   if (btn.classList.contains("checked")) {
     if (prompt("Enter parent PIN") !== PIN) return;
 
     btn.classList.remove("checked");
     delete data.checked[id];
+
     data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
     data.kids[i].total = Math.max(0, data.kids[i].total - stars);
+
+    savePartial({
+      [`checked/${id}`]: null,
+      [`kids/${i}`]: data.kids[i]
+    });
+
   } else {
+    // ✅ Child check
     btn.classList.add("checked");
     data.checked[id] = true;
+
     data.kids[i].daily += stars;
     data.kids[i].total += stars;
-  }
 
-  save();
+    savePartial({
+      [`checked/${id}`]: true,
+      [`kids/${i}`]: data.kids[i]
+    });
+  }
 }
+
 
 // 🔒 Parent reset
 function resetChild(i) {
