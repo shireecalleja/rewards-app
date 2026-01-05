@@ -257,30 +257,35 @@ function toggleTask(btn, i, stars){
   const id = btn.dataset.id;
   if(!id) return;
 
-  const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
+  let checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
 
-  // IF already checked → require parent PIN to uncheck
+  // 🔒 UNCHECK (parent only)
   if(btn.classList.contains("checked")){
     if(prompt("Enter parent PIN to uncheck") !== PIN) return;
 
-    btn.classList.remove("checked");
+    // remove from storage FIRST
     delete checked[id];
-
-    data.kids[i].daily -= stars;
-    data.kids[i].total -= stars;
-
     localStorage.setItem("checkedTasks", JSON.stringify(checked));
-    save();
+
+    // remove UI state
+    btn.classList.remove("checked");
+
+    // remove stars safely
+    data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
+    data.kids[i].total = Math.max(0, data.kids[i].total - stars);
+
+    save(); // render + persist
     return;
   }
 
-  // Normal checking (no PIN)
+  // ✅ NORMAL CHECK (kids)
   btn.classList.add("checked");
   checked[id] = true;
   localStorage.setItem("checkedTasks", JSON.stringify(checked));
 
   addStar(i, stars);
 }
+
 
 
 function addStar(i,val){
