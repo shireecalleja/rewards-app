@@ -309,28 +309,7 @@ let data=JSON.parse(localStorage.getItem("kidsData"))||{
 
 function save(){localStorage.setItem("kidsData",JSON.stringify(data));}
 
-function toggleTask(btn, i, stars){
-  const id = btn.dataset.id;
-  if(!id) return;
 
-  // UNCHECK (parent protected)
-  if(btn.classList.contains("checked")){
-    if(prompt("Enter parent PIN") !== PIN) return;
-
-    btn.classList.remove("checked");
-    saveChecked(id, false);
-
-    data.kids[i].daily -= stars;
-    data.kids[i].total -= stars;
-    save();
-    return;
-  }
-
-  // CHECK
-  btn.classList.add("checked");
-  saveChecked(id, true);
-  addStar(i, stars);
-}
 
 
 function addStar(i,val){
@@ -377,13 +356,8 @@ function resetChild(i){
 
 function saveChecked(id, value){
   const checked = JSON.parse(localStorage.getItem("checkedTasks")) || {};
-
-  if(value){
-    checked[id] = true;
-  } else {
-    delete checked[id];
-  }
-
+  if(value) checked[id] = true;
+  else delete checked[id];
   localStorage.setItem("checkedTasks", JSON.stringify(checked));
 }
 
