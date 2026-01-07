@@ -156,8 +156,10 @@ let data = {
   lastWeekly:""
 };
 
-dbRef.on("value",s=>{
-  if(s.exists()) data=s.val();
+dbRef.on("value", s => {
+  if (s.exists()) data = s.val();
+
+  autoResets();      // ✅ STEP 2 GOES HERE
   restoreChecks();
   render();
 });
@@ -254,12 +256,6 @@ function autoResets(){
 
 function save(){ dbRef.set(data); }
   
-// 🔁 Run auto resets ONCE after initial Firebase load
-db.once("value").then(() => {
-  autoResets();
-});
-
 </script>
-
 </body>
 </html>
