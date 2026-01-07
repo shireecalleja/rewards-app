@@ -213,27 +213,38 @@ function render(){
   });
 }
 
-function autoReset(){
-  const now=new Date();
-  const today=now.toDateString();
-  if(data.lastDaily!==today){
-    data.kids.forEach(k=>k.daily=0);
-    data.checked={};
-    data.lastDaily=today;
+function autoResets(){
+  const now = new Date();
+  const today = now.toDateString();
+
+  // 🌙 DAILY RESET (runs once per day)
+  if(data.lastDailyReset !== today){
+    data.kids.forEach(k => k.daily = 0);
+    data.checked = {};
+    data.lastDailyReset = today;
   }
-  const monday=new Date(now);
-  monday.setDate(now.getDate()-((now.getDay()+6)%7));
-  const wk=monday.toDateString();
-  if(data.lastWeekly!==wk){
-    data.kids.forEach(k=>k.weekly=0);
-    data.lastWeekly=wk;
+
+  // 📅 WEEKLY RESET (Monday)
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  const weekKey = monday.toDateString();
+
+  if(data.lastWeeklyReset !== weekKey){
+    data.kids.forEach(k => k.weekly = 0);
+    data.lastWeeklyReset = weekKey;
   }
+
   save();
 }
 
-function save(){ dbRef.set(data); }
 
-setTimeout(autoReset,1000);
+function save(){ dbRef.set(data); }
+  
+// 🔁 Run auto resets ONCE after initial Firebase load
+db.once("value").then(() => {
+  autoResets();
+});
+
 </script>
 
 </body>
