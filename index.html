@@ -165,21 +165,33 @@ dbRef.on("value", s => {
   render();
 });
 
-function toggleTask(btn,i,stars){
-  const id=btn.dataset.id;
-  const checked=!!data.checked[id];
+function toggleTask(btn, i, stars){
+  const id = btn.dataset.id;
+  const isChecked = !!data.checked[id];
 
-  if(checked){
-    if(prompt("Enter parent PIN")!==PIN) return;
+  // 🔒 UNCHECK (parent only)
+  if(isChecked){
+    if(prompt("Enter parent PIN") !== PIN) return;
+
     delete data.checked[id];
-    data.kids[i].daily=Math.max(0,data.kids[i].daily-stars);
-    data.kids[i].weekly=Math.max(0,data.kids[i].weekly-stars);
-  }else{
-    data.checked[id]=true;
-    data.kids[i].daily+=stars;
-    data.kids[i].weekly+=stars;
+    data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
+    data.kids[i].weekly = Math.max(0, data.kids[i].weekly - stars);
+
+    // ✅ update UI immediately
+    btn.classList.remove("checked");
   }
-  save();
+  // ✅ CHECK
+  else{
+    data.checked[id] = true;
+    data.kids[i].daily += stars;
+    data.kids[i].weekly += stars;
+
+    // ✅ update UI immediately
+    btn.classList.add("checked");
+  }
+
+  render(); // update tallies + race instantly
+  save();   // sync to Firebase
 }
 
 function resetChild(i){
