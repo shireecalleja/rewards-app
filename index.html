@@ -240,11 +240,13 @@ function render(){
 function autoResets(){
   const now = new Date();
   const today = now.toDateString();
+  let changed = false;
 
-  // 🌙 DAILY RESET (runs once per day)
+  // 🌙 DAILY RESET
   if(data.lastDailyReset !== today){
     data.kids.forEach(k => k.daily = 0);
     data.lastDailyReset = today;
+    changed = true;
   }
 
   // 📅 WEEKLY RESET (Monday)
@@ -255,9 +257,13 @@ function autoResets(){
   if(data.lastWeeklyReset !== weekKey){
     data.kids.forEach(k => k.weekly = 0);
     data.lastWeeklyReset = weekKey;
+    changed = true;
   }
 
-  save();
+  // 🔥 ONLY SAVE IF SOMETHING CHANGED
+  if(changed){
+    save();
+  }
 }
 
 
