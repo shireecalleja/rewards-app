@@ -132,6 +132,9 @@ Lachlan
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
+
+  let isSaving = false;
+  
 const firebaseConfig = {
   databaseURL: "https://rewards-app-12c6f-default-rtdb.firebaseio.com"
 };
@@ -153,12 +156,10 @@ let data = {
 let initialized = false;
 
 dbRef.on("value", s => {
-  if (s.exists()) data = s.val();
+  if (isSaving) return; // 🚫 ignore our own writes
 
-  // 🔁 run resets ONCE when app first loads
-  if (!initialized) {
-    autoResets();
-    initialized = true;
+  if (s.exists()) {
+    data = s.val();
   }
 
   restoreChecks();
@@ -273,7 +274,12 @@ function autoResets(){
 }
 
 
-function save(){ dbRef.set(data); }
+function save(){
+  isSaving = true;
+  dbRef.set(data).then(() => {
+    isSaving = false;
+  });
+}
   
 </script>
 </body>
