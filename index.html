@@ -168,31 +168,28 @@ dbRef.on("value", s => {
 
 function toggleTask(btn, i, stars){
   const id = btn.dataset.id;
+  if (!id) return;
+
+  // ✅ SAFETY: always ensure checked exists
+  if (!data.checked) data.checked = {};
+
   const isChecked = !!data.checked[id];
 
-  // 🔒 UNCHECK (parent only)
-  if(isChecked){
-    if(prompt("Enter parent PIN") !== PIN) return;
+  // 🔒 Parent PIN required to UNCHECK
+  if (isChecked) {
+    if (prompt("Enter parent PIN") !== PIN) return;
 
     delete data.checked[id];
     data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
     data.kids[i].weekly = Math.max(0, data.kids[i].weekly - stars);
-
-    // ✅ update UI immediately
-    btn.classList.remove("checked");
-  }
-  // ✅ CHECK
-  else{
+  } else {
+    // ✅ normal check
     data.checked[id] = true;
     data.kids[i].daily += stars;
     data.kids[i].weekly += stars;
-
-    // ✅ update UI immediately
-    btn.classList.add("checked");
   }
 
-  render(); // update tallies + race instantly
-  save();   // sync to Firebase
+  save(); // 🔥 write once, Firebase listener handles UI
 }
 
 function resetChild(i){
@@ -251,10 +248,10 @@ function autoResets(){
 
   // 🌙 DAILY RESET
   if(data.lastDailyReset !== today){
-    data.kids.forEach(k => k.daily = 0);
-    data.lastDailyReset = today;
-    changed = true;
-  }
+  data.kids.forEach(k => k.daily = 0);
+  data.checked = {}; // ✅ CLEAR checks on new day
+  data.lastDailyReset = today;
+}
 
   // 📅 WEEKLY RESET (Monday)
   const monday = new Date(now);
