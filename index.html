@@ -180,12 +180,22 @@ function toggleTask(btn,i,stars){
 }
 
 function resetChild(i){
-  if(prompt("Enter parent PIN")!==PIN) return;
-  data.kids[i].daily=0;
-  Object.keys(data.checked).forEach(id=>{
-    if((i===0&&id.startsWith("a-"))||(i===1&&id.startsWith("l-")))
-      delete data.checked[id];
-  });
+  if(prompt("Enter parent PIN") !== PIN) return;
+
+  data.kids[i].daily = 0;
+  data.kids[i].weekly = 0;
+
+  if(data.checked){
+    Object.keys(data.checked).forEach(id=>{
+      if(
+        (i === 0 && id.startsWith("a-")) ||
+        (i === 1 && id.startsWith("l-"))
+      ){
+        delete data.checked[id];
+      }
+    });
+  }
+
   save();
 }
 
@@ -197,8 +207,13 @@ function redeem(i,cost){
 }
 
 function restoreChecks(){
-  document.querySelectorAll(".check").forEach(b=>{
-    b.classList.toggle("checked",data.checked[b.dataset.id]);
+  document.querySelectorAll(".check").forEach(btn=>{
+    const id = btn.dataset.id;
+    btn.classList.remove("checked");
+
+    if(data.checked && data.checked[id]){
+      btn.classList.add("checked");
+    }
   });
 }
 
@@ -220,7 +235,6 @@ function autoResets(){
   // 🌙 DAILY RESET (runs once per day)
   if(data.lastDailyReset !== today){
     data.kids.forEach(k => k.daily = 0);
-    data.checked = {};
     data.lastDailyReset = today;
   }
 
