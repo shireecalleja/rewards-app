@@ -152,14 +152,21 @@ let data = {
     {daily:0,weekly:0}
   ],
   checked:{},
-  lastDaily:"",
-  lastWeekly:""
+  lastDailyReset:"",
+  lastWeeklyReset:""
 };
+
+let initialized = false;
 
 dbRef.on("value", s => {
   if (s.exists()) data = s.val();
 
-  autoResets();      // ✅ STEP 2 GOES HERE
+  // 🔁 run resets ONCE when app first loads
+  if (!initialized) {
+    autoResets();
+    initialized = true;
+  }
+
   restoreChecks();
   render();
 });
