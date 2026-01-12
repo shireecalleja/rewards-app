@@ -155,11 +155,12 @@ let data = {
 
 let initialized = false;
 
-dbRef.on("value", s => {
-  if (isSaving) return; // 🚫 ignore our own writes
+dbRef.on("value", snapshot => {
+  if (snapshot.exists()) data = snapshot.val();
 
-  if (s.exists()) {
-    data = s.val();
+  if (!initialized) {
+    autoResets();   // 👈 runs ONCE per app load
+    initialized = true;
   }
 
   restoreChecks();
@@ -241,33 +242,41 @@ function render(){
   });
 }
 
-function autoResets(){
+<script>
+function getTodayKey() {
+  return new Date().toDateString();
+}
+
+function getWeekKey() {
   const now = new Date();
-  const today = now.toDateString();
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  return monday.toDateString();
+}
+</script>
+  
+function autoResets() {
+  const todayKey = getTodayKey();
+  const weekKey = getWeekKey();
+
   let changed = false;
 
   // 🌙 DAILY RESET
-  if(data.lastDailyReset !== today){
-  data.kids.forEach(k => k.daily = 0);
-  data.checked = {}; // ✅ CLEAR checks on new day
-  data.lastDailyReset = today;
-}
+  if (data.lastDailyReset !== todayKey) {
+    data.kids.forEach(k => k.daily = 0);
+    data.checked = {}; // clear all checkmarks
+    data.lastDailyReset = todayKey;
+    changed = true;
+  }
 
   // 📅 WEEKLY RESET (Monday)
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
-  const weekKey = monday.toDateString();
-
-  if(data.lastWeeklyReset !== weekKey){
+  if (data.lastWeeklyReset !== weekKey) {
     data.kids.forEach(k => k.weekly = 0);
     data.lastWeeklyReset = weekKey;
     changed = true;
   }
 
-  // 🔥 ONLY SAVE IF SOMETHING CHANGED
-  if(changed){
-    save();
-  }
+  if (changed) save();
 }
 
 
