@@ -167,32 +167,32 @@ dbRef.on("value", snapshot => {
   render();
 });
 
-function toggleTask(btn, i, stars){
+function toggleTask(btn, i, stars) {
   const id = btn.dataset.id;
-  if (!id) return;
 
-  // ✅ SAFETY: always ensure checked exists
+  // 🛡️ SAFETY: ensure checked object always exists
   if (!data.checked) data.checked = {};
 
   const isChecked = !!data.checked[id];
 
-  // 🔒 Parent PIN required to UNCHECK
+  // 🔒 UNCHECK (parent only)
   if (isChecked) {
     if (prompt("Enter parent PIN") !== PIN) return;
 
     delete data.checked[id];
     data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
     data.kids[i].weekly = Math.max(0, data.kids[i].weekly - stars);
-  } else {
-    // ✅ normal check
+  } 
+  // ✅ CHECK
+  else {
     data.checked[id] = true;
     data.kids[i].daily += stars;
     data.kids[i].weekly += stars;
   }
 
-  save(); // 🔥 write once, Firebase listener handles UI
+  save();
 }
-
+  
 function resetChild(i){
   if(prompt("Enter parent PIN") !== PIN) return;
 
