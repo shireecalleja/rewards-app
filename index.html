@@ -128,6 +128,9 @@ Lachlan
 
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <script>
 
   let isSaving = false;
@@ -153,61 +156,42 @@ let data = {
 let initialized = false;
 
 dbRef.on("value", s => {
+  if (isSaving) return; // 🚫 ignore our own writes
 
-  // 🛡️ Always start from a valid base
   if (s.exists()) {
     data = s.val();
-  } else {
-    data = {
-      kids: [
-        { daily: 0, weekly: 0 },
-        { daily: 0, weekly: 0 }
-      ],
-      checked: {},
-      lastDaily: "",
-      lastWeekly: ""
-    };
-    save(); // create chart in Firebase once
-  }
-
-  // 🛡️ GUARANTEE checked always exists
-  if (!data.checked) data.checked = {};
-
-  if (!initialized) {
-    autoResets();
-    initialized = true;
   }
 
   restoreChecks();
   render();
 });
 
-function toggleTask(btn, i, stars) {
+function toggleTask(btn, i, stars){
   const id = btn.dataset.id;
+  if (!id) return;
 
-  // 🛡️ SAFETY: ensure checked object always exists
+  // ✅ SAFETY: always ensure checked exists
   if (!data.checked) data.checked = {};
 
   const isChecked = !!data.checked[id];
 
-  // 🔒 UNCHECK (parent only)
+  // 🔒 Parent PIN required to UNCHECK
   if (isChecked) {
     if (prompt("Enter parent PIN") !== PIN) return;
 
     delete data.checked[id];
     data.kids[i].daily = Math.max(0, data.kids[i].daily - stars);
     data.kids[i].weekly = Math.max(0, data.kids[i].weekly - stars);
-  } 
-  // ✅ CHECK
-  else {
+  } else {
+    // ✅ normal check
     data.checked[id] = true;
     data.kids[i].daily += stars;
     data.kids[i].weekly += stars;
   }
 
-  save();
+  save(); // 🔥 write once, Firebase listener handles UI
 }
-  
+
 function resetChild(i){
   if(prompt("Enter parent PIN") !== PIN) return;
 
@@ -257,39 +241,33 @@ function render(){
   });
 }
 
-function getTodayKey() {
-  return new Date().toDateString();
-}
-
-function getWeekKey() {
+function autoResets(){
   const now = new Date();
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
-  return monday.toDateString();
-}
-  
-function autoResets() {
-  const todayKey = getTodayKey();
-  const weekKey = getWeekKey();
-
+  const today = now.toDateString();
   let changed = false;
 
   // 🌙 DAILY RESET
-  if (data.lastDailyReset !== todayKey) {
-    data.kids.forEach(k => k.daily = 0);
-    data.checked = {}; // clear all checkmarks
-    data.lastDailyReset = todayKey;
-    changed = true;
-  }
+  if(data.lastDailyReset !== today){
+  data.kids.forEach(k => k.daily = 0);
+  data.checked = {}; // ✅ CLEAR checks on new day
+  data.lastDailyReset = today;
+}
 
   // 📅 WEEKLY RESET (Monday)
-  if (data.lastWeeklyReset !== weekKey) {
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  const weekKey = monday.toDateString();
+
+  if(data.lastWeeklyReset !== weekKey){
     data.kids.forEach(k => k.weekly = 0);
     data.lastWeeklyReset = weekKey;
     changed = true;
   }
 
-  if (changed) save();
+  // 🔥 ONLY SAVE IF SOMETHING CHANGED
+  if(changed){
+    save();
+  }
 }
 
 
