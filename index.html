@@ -155,11 +155,29 @@ let data = {
 
 let initialized = false;
 
-dbRef.on("value", snapshot => {
-  if (snapshot.exists()) data = snapshot.val();
+dbRef.on("value", s => {
+
+  // 🛡️ Always start from a valid base
+  if (s.exists()) {
+    data = s.val();
+  } else {
+    data = {
+      kids: [
+        { daily: 0, weekly: 0 },
+        { daily: 0, weekly: 0 }
+      ],
+      checked: {},
+      lastDaily: "",
+      lastWeekly: ""
+    };
+    save(); // create chart in Firebase once
+  }
+
+  // 🛡️ GUARANTEE checked always exists
+  if (!data.checked) data.checked = {};
 
   if (!initialized) {
-    autoResets();   // 👈 runs ONCE per app load
+    autoResets();
     initialized = true;
   }
 
