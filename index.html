@@ -241,33 +241,52 @@ function render(){
   });
 }
 
-function autoResets(){
+function scheduleWeeklyReset(){
   const now = new Date();
-  const today = now.toDateString();
-  let changed = false;
+  const day = now.getDay(); // 0=Sun, 1=Mon
+  const daysUntilMonday = (8 - day) % 7 || 7;
 
-  // 🌙 DAILY RESET
-  if(data.lastDailyReset !== today){
-  data.kids.forEach(k => k.daily = 0);
-  data.checked = {}; // ✅ CLEAR checks on new day
-  data.lastDailyReset = today;
+  const nextMonday = new Date(now);
+  nextMonday.setDate(now.getDate() + daysUntilMonday);
+  nextMonday.setHours(0, 0, 0, 0);
+
+  const msUntilReset = nextMonday - now;
+
+  setTimeout(() => {
+    data.kids.forEach(kid => {
+      kid.total = 0;   // 🔄 weekly reset
+    });
+    save();
+    scheduleWeeklyReset();
+  }, msUntilReset);
 }
 
-  // 📅 WEEKLY RESET (Monday)
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
-  const weekKey = monday.toDateString();
 
-  if(data.lastWeeklyReset !== weekKey){
-    data.kids.forEach(k => k.weekly = 0);
-    data.lastWeeklyReset = weekKey;
-    changed = true;
-  }
+function save(){
+  localStorage.setItem("kidsData", JSON.stringify(data));
+  render();
+}
 
-  // 🔥 ONLY SAVE IF SOMETHING CHANGED
-  if(changed){
+function scheduleMidnightReset(){
+  const now = new Date();
+  const midnight = new Date();
+  midnight.setHours(24, 0, 0, 0); // next midnight
+
+  const msUntilMidnight = midnight - now;
+
+  setTimeout(() => {
+    // Reset daily stars
+    data.kids.forEach(kid => kid.daily = 0);
+
+    // Clear all checked tasks
+    localStorage.removeItem("checkedTasks");
+
+    // Save + update UI
     save();
-  }
+
+    // Schedule next midnight reset
+    scheduleMidnightReset();
+  }, msUntilMidnight);
 }
 
 
