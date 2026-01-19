@@ -162,6 +162,9 @@ dbRef.on("value", s => {
     data = s.val();
   }
 
+  scheduleMidnightReset();
+scheduleWeeklyReset();
+  
   restoreChecks();
   render();
 });
@@ -241,6 +244,19 @@ function render(){
   });
 }
 
+function scheduleMidnightReset(){
+  const now = new Date();
+  const midnight = new Date();
+  midnight.setHours(24, 0, 0, 0);
+
+  setTimeout(() => {
+    data.kids.forEach(kid => kid.daily = 0);
+    data.checked = {};
+    save();
+    scheduleMidnightReset(); // schedule next day
+  }, midnight - now);
+}
+
 function scheduleWeeklyReset(){
   const now = new Date();
   const day = now.getDay(); // 0=Sun, 1=Mon
@@ -248,45 +264,13 @@ function scheduleWeeklyReset(){
 
   const nextMonday = new Date(now);
   nextMonday.setDate(now.getDate() + daysUntilMonday);
-  nextMonday.setHours(0, 0, 0, 0);
-
-  const msUntilReset = nextMonday - now;
+  nextMonday.setHours(0,0,0,0);
 
   setTimeout(() => {
-    data.kids.forEach(kid => {
-      kid.total = 0;   // 🔄 weekly reset
-    });
+    data.kids.forEach(kid => kid.weekly = 0);
     save();
-    scheduleWeeklyReset();
-  }, msUntilReset);
-}
-
-
-function save(){
-  localStorage.setItem("kidsData", JSON.stringify(data));
-  render();
-}
-
-function scheduleMidnightReset(){
-  const now = new Date();
-  const midnight = new Date();
-  midnight.setHours(24, 0, 0, 0); // next midnight
-
-  const msUntilMidnight = midnight - now;
-
-  setTimeout(() => {
-    // Reset daily stars
-    data.kids.forEach(kid => kid.daily = 0);
-
-    // Clear all checked tasks
-    localStorage.removeItem("checkedTasks");
-
-    // Save + update UI
-    save();
-
-    // Schedule next midnight reset
-    scheduleMidnightReset();
-  }, msUntilMidnight);
+    scheduleWeeklyReset(); // schedule next week
+  }, nextMonday - now);
 }
 
 
@@ -296,6 +280,8 @@ function save(){
     isSaving = false;
   });
 }
+
+
   
 </script>
 </body>
