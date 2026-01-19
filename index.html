@@ -162,8 +162,6 @@ dbRef.on("value", s => {
     data = s.val();
   }
 
-  scheduleMidnightReset();
-scheduleWeeklyReset();
   
   restoreChecks();
   render();
@@ -272,7 +270,9 @@ function scheduleWeeklyReset(){
     scheduleWeeklyReset(); // schedule next week
   }, nextMonday - now);
 }
-
+  
+ scheduleMidnightReset();
+scheduleWeeklyReset();
 
 function save(){
   isSaving = true;
