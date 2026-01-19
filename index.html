@@ -245,7 +245,7 @@ function render(){
 function scheduleMidnightReset(){
   const now = new Date();
   const midnight = new Date();
-  midnight.setMinutes(now.getMinutes() + 1);
+  midnight.setHours(24,0,0,0);
 
   setTimeout(() => {
     data.kids.forEach(kid => kid.daily = 0);
