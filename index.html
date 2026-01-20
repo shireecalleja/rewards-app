@@ -155,14 +155,26 @@ let data = {
 
 let initialized = false;
 
+function getTodayKey() {
+  return new Date().toDateString();
+}
+
+function getWeekKey() {
+  const now = new Date();
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  return monday.toDateString();
+}
+  
 dbRef.on("value", s => {
-  if (isSaving) return; // 🚫 ignore our own writes
+  if (isSaving) return;
 
   if (s.exists()) {
     data = s.val();
   }
 
-  
+  runAutoResets();   // ✅ THIS LINE
+
   restoreChecks();
   render();
 });
@@ -274,6 +286,29 @@ function scheduleWeeklyReset(){
  scheduleMidnightReset();
 scheduleWeeklyReset();
 
+function runAutoResets() {
+  const today = getTodayKey();
+  const week = getWeekKey();
+  let changed = false;
+
+  // 🌙 Daily reset
+  if (data.lastDailyReset !== today) {
+    data.kids.forEach(k => k.daily = 0);
+    data.checked = {};
+    data.lastDailyReset = today;
+    changed = true;
+  }
+
+  // 📅 Weekly reset (Monday)
+  if (data.lastWeeklyReset !== week) {
+    data.kids.forEach(k => k.weekly = 0);
+    data.lastWeeklyReset = week;
+    changed = true;
+  }
+
+  if (changed) save();
+}
+  
 function save(){
   isSaving = true;
   dbRef.set(data).then(() => {
