@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <title>Rewards Chart</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,7 +42,169 @@ h1{text-align:center}
 .race{background:#fff;border-radius:18px;padding:14px;margin-bottom:20px;box-shadow:0 6px 18px rgba(0,0,0,.1)}
 .track{background:#ddd;height:20px;border-radius:12px;overflow:hidden;margin:6px 0}
 .runner{height:100%;width:0%;transition:.4s}
+
+  /* =========================
+   MINECRAFT THEME (ADAM)
+========================= */
+.theme-minecraft {
+  background: linear-gradient(#7cb342, #558b2f);
+  color: #1b5e20;
+}
+
+.theme-minecraft .section-title {
+  background: #33691e !important;
+}
+
+.theme-minecraft .check {
+  background: #8d6e63;
+}
+
+.theme-minecraft .check.checked {
+  background: #2e7d32;
+}
+
+.theme-minecraft .progress {
+  background: #4e342e;
+}
+
+.theme-minecraft .progress span {
+  background: #66bb6a;
+}
+
+.theme-minecraft .reward {
+  background: #388e3c;
+}
+
+.theme-minecraft .reset button {
+  background: #5d4037;
+  color: #fff;
+  border-radius: 6px;
+}
+
+/* =========================
+   PAW PATROL THEME (LACHLAN)
+========================= */
+.theme-pawpatrol {
+  background: linear-gradient(#e3f2fd, #bbdefb);
+  color: #0d47a1;
+}
+
+.theme-pawpatrol .section-title {
+  background: #1976d2 !important;
+}
+
+.theme-pawpatrol .check {
+  background: #ffcc80;
+}
+
+.theme-pawpatrol .check.checked {
+  background: #e53935;
+}
+
+.theme-pawpatrol .progress {
+  background: #90caf9;
+}
+
+.theme-pawpatrol .progress span {
+  background: #1e88e5;
+}
+
+.theme-pawpatrol .reward {
+  background: #e53935;
+}
+
+.theme-pawpatrol .reset button {
+  background: #1e88e5;
+  color: #fff;
+  border-radius: 20px;
+}
+
+.minecraft-name {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: #2e7d32;
+}
+
+.paw-check {
+  background: radial-gradient(circle at top, #ff5252, #d32f2f);
+  border: 3px solid #ffd600;
+  box-shadow: 0 0 0 3px #1976d2;
+}
+
+.paw-check.checked {
+  background: radial-gradient(circle at top, #ffd600, #ffb300);
+}
+
+.paw-check::after {
+  content: "⭐";
+  font-size: 18px;
+  color: #1976d2;
+  opacity: 1;
+}
+
+/* ---------- Shared ---------- */
+.child-name {
+  text-align: center;
+  margin: 10px 0;
+}
+
+/* ---------- Adam (Minecraft) ---------- */
+.minecraft-name {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 22px;
+  color: #4CAF50;
+  text-shadow: 3px 3px #1b5e20;
+}
+
+/* ---------- Lachlan (Paw Patrol) ---------- */
+.pawpatrol-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.paw-name {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1e88e5;
+}
+
+.paw-pup {
+  height: 60px;
+}
+
+.paw-pup.left {
+  transform: rotate(-5deg);
+}
+
+.paw-pup.right {
+  transform: rotate(5deg);
+}
+
+  .paw-stars {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #1e90ff;
+}
+
+.paw-icon {
+  height: 28px;
+}
+
+.name-pup {
+  height: 42px;
+  vertical-align: middle;
+}
+  
 </style>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
 </head>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
@@ -91,9 +254,9 @@ Lachlan
 <div class="container">
 
 <!-- ADAM -->
-<div class="card">
+<div class="card theme-minecraft">
 <div class="avatar">🚀</div>
-<div class="name">Adam</div>
+<h1 class="child-name minecraft-name">Adam</h1>
 <div class="progress"><span class="blue"></span></div>
 
 <div class="section-title morning">Morning</div>
@@ -125,27 +288,33 @@ Lachlan
 </div>
 
 <!-- LACHLAN -->
-<div class="card">
-<div class="avatar">🐯</div>
-<div class="name">Lachlan</div>
+<div class="pawpatrol-name">
+<img src="assets/chase.png" alt="Chase" class="paw-pup left">
+<h1 class="child-name paw-name">Lachlan</h1>
+<img src="assets/marshall.png" alt="Marshall" class="paw-pup right">
+  
+<div class="stars paw-stars">
+  <img src="assets/paw-star.png" class="paw-icon">
+  <span id="lachlanStars">12</span>
+</div>  
 <div class="progress"><span class="green"></span></div>
 
 <div class="section-title morning">Morning</div>
-<div class="task"><span>👕 Get dressed ⭐1</span><button class="check" data-id="l-m-1" onclick="toggleTask(this,1,1)"></button></div>
-<div class="task"><span>🛏️ Make bed ⭐1</span><button class="check" data-id="l-m-2" onclick="toggleTask(this,1,1)"></button></div>
-<div class="task"><span>🧼 Wash face ⭐1</span><button class="check" data-id="l-m-3" onclick="toggleTask(this,1,1)"></button></div>
-<div class="task"><span>🎒 Pack bag ⭐1</span><button class="check" data-id="l-m-4" onclick="toggleTask(this,1,1)"></button></div>
+<div class="task"><span>👕 Get dressed ⭐1</span><button class="check paw-check" data-id="l-m-1" onclick="toggleTask(this,1,1)"></button></div>
+<div class="task"><span>🛏️ Make bed ⭐1</span><button class="check paw-check" data-id="l-m-2" onclick="toggleTask(this,1,1)"></button></div>
+<div class="task"><span>🧼 Wash face ⭐1</span><button class="check paw-check" data-id="l-m-3" onclick="toggleTask(this,1,1)"></button></div>
+<div class="task"><span>🎒 Pack bag ⭐1</span><button class="check paw-check" data-id="l-m-4" onclick="toggleTask(this,1,1)"></button></div>
 
 <div class="section-title afternoon">Afternoon</div>
-<div class="task"><span>🎒 Unpack bag ⭐2</span><button class="check" data-id="l-a-1" onclick="toggleTask(this,1,2)"></button></div>
-<div class="task"><span>📚 Homework ⭐2</span><button class="check" data-id="l-a-2" onclick="toggleTask(this,1,2)"></button></div>
-<div class="task"><span>🍽️ Set table ⭐2</span><button class="check" data-id="l-a-3" onclick="toggleTask(this,1,2)"></button></div>
-<div class="task"><span>📖 Reading ⭐3</span><button class="check" data-id="l-a-4" onclick="toggleTask(this,1,3)"></button></div>
+<div class="task"><span>🎒 Unpack bag ⭐2</span><button class="check paw-check" data-id="l-a-1" onclick="toggleTask(this,1,2)"></button></div>
+<div class="task"><span>📚 Homework ⭐2</span><button class="check paw-check" data-id="l-a-2" onclick="toggleTask(this,1,2)"></button></div>
+<div class="task"><span>🍽️ Set table ⭐2</span><button class="check paw-check" data-id="l-a-3" onclick="toggleTask(this,1,2)"></button></div>
+<div class="task"><span>📖 Reading ⭐3</span><button class="check paw-check" data-id="l-a-4" onclick="toggleTask(this,1,3)"></button></div>
 
 <div class="section-title evening">Evening</div>
-<div class="task"><span>🍽️ Clean table ⭐1</span><button class="check" data-id="l-e-1" onclick="toggleTask(this,1,1)"></button></div>
-<div class="task"><span>🚿 Shower & teeth ⭐1</span><button class="check" data-id="l-e-2" onclick="toggleTask(this,1,1)"></button></div>
-<div class="task"><span>🧺 Put laundry away ⭐3</span><button class="check" data-id="l-e-3" onclick="toggleTask(this,1,3)"></button></div>
+<div class="task"><span>🍽️ Clean table ⭐1</span><button class="check paw-check" data-id="l-e-1" onclick="toggleTask(this,1,1)"></button></div>
+<div class="task"><span>🚿 Shower & teeth ⭐1</span><button class="check paw-check" data-id="l-e-2" onclick="toggleTask(this,1,1)"></button></div>
+<div class="task"><span>🧺 Put laundry away ⭐3</span><button class="check paw-check" data-id="l-e-3" onclick="toggleTask(this,1,3)"></button></div>
 
 <div class="stats" id="stats1"></div>
 
