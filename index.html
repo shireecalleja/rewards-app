@@ -44,6 +44,20 @@ h1{text-align:center}
 </style>
 </head>
 
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
+
+<script>
+const messaging = firebase.messaging();
+
+messaging.getToken({
+  vapidKey: "BNAFSh2fLgGBsiNA70U6GxJLwMshuv-99EwknPPi4SKgl2SD38N965pdqx_-j93Asoia7S8Wzl2vUcmv9Aix7nM"
+}).then(token => {
+  if (token) {
+    firebase.database().ref("adminToken").set(token);
+  }
+});
+</script>
+  
 <body>
 
 <h1>⭐ Rewards Chart ⭐</h1>
