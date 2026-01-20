@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+z<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -57,6 +57,23 @@ messaging.getToken({
   }
 });
 
+  exports.notifyChore = functions.database
+  .ref("/chart/checked/{taskId}")
+  .onCreate(async (snap, context) => {
+
+    const adminTokenSnap = await admin.database().ref("adminToken").once("value");
+    const token = adminTokenSnap.val();
+    if (!token) return null;
+
+    const payload = {
+      notification: {
+        title: "⭐ Chore Completed!",
+        body: "A chore was just checked off 🎉"
+      }
+    };
+
+    return admin.messaging().sendToDevice(token, payload);
+});
 </script>
   
 <body>
@@ -170,24 +187,6 @@ let data = {
 
 let initialized = false;
 
-  exports.notifyChore = functions.database
-  .ref("/chart/checked/{taskId}")
-  .onCreate(async (snap, context) => {
-
-    const adminTokenSnap = await admin.database().ref("adminToken").once("value");
-    const token = adminTokenSnap.val();
-    if (!token) return null;
-
-    const payload = {
-      notification: {
-        title: "⭐ Chore Completed!",
-        body: "A chore was just checked off 🎉"
-      }
-    };
-
-    return admin.messaging().sendToDevice(token, payload);
-});
-  
 function getTodayKey() {
   return new Date().toDateString();
 }
