@@ -41,6 +41,27 @@ h1{text-align:center}
 .race{background:#fff;border-radius:18px;padding:14px;margin-bottom:20px;box-shadow:0 6px 18px rgba(0,0,0,.1)}
 .track{background:#ddd;height:20px;border-radius:12px;overflow:hidden;margin:6px 0}
 .runner{height:100%;width:0%;transition:.4s}
+
+  .name-with-pic {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* center horizontally */
+  gap: 8px; /* space between name and image */
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.name-with-pic .child-name {
+  display: inline-block;
+}
+
+.name-with-pic .child-pic {
+  width: 36px;       /* adjust size as needed */
+  height: 36px;
+  border-radius: 8px; /* rounded corners */
+  object-fit: cover;  /* keep image proportions */
+}
 </style>
 </head>
 
@@ -92,7 +113,10 @@ Lachlan
 
 <!-- ADAM -->
 <div class="card">
-<div class="name">Adam</div>
+<div class="name-with-pic">
+  <span class="child-name">Adam</span>
+  <img src="images/minecraft.png" alt="Minecraft" class="child-pic">
+</div>
 <div class="progress"><span class="blue"></span></div>
 
 <div class="section-title morning">Morning</div>
@@ -125,7 +149,10 @@ Lachlan
 
 <!-- LACHLAN -->
 <div class="card">
-<div class="name">Lachlan</div>
+<div class="name-with-pic">
+  <span class="child-name">Lachlan</span>
+  <img src="images/pawpatrol.png" alt="Paw Patrol" class="child-pic">
+</div>
 <div class="progress"><span class="green"></span></div>
 
 <div class="section-title morning">Morning</div>
